@@ -1,0 +1,275 @@
+# PersonaSay Helm Chart Values
+# Override these values when deploying to different environments
+
+global:
+  # Environment variables shared across all components
+  env:
+    # OpenAI Configuration (REQUIRED)
+    OPENAI_API_KEY: ""  # Set this via --set or values override
+    
+    # Backend Configuration
+    PORT: "8001"
+    HOST: "0.0.0.0"
+    DEBUG: "false"
+    ENVIRONMENT: "production"  # production | development
+    
+    # Logging Configuration
+    LOG_LEVEL: "WARNING"  # DEBUG | INFO | WARNING | ERROR | CRITICAL
+    LOG_TO_FILE: "true"
+    
+    # Security Configuration (REQUIRED for production)
+    SECRET_KEY: ""  # Generate with: python -c "import secrets; print(secrets.token_urlsafe(32))"
+    CORS_ORIGINS: ""  # Comma-separated list of allowed origins
+    
+    # Database Configuration
+    DATABASE_URL: "sqlite:///./data/personasay.db"
+    # For PostgreSQL: postgresql://user:password@postgres-service:5432/personasay
+    
+    # Optional: Redis for caching
+    REDIS_URL: ""
+
+# Backend Service Configuration
+backend:
+  enabled: true
+  replicaCount: 2
+  
+  image:
+    repository: personasay/backend
+    pullPolicy: IfNotPresent
+    tag: "1.0.0"
+  
+  imagePullSecrets: []
+  nameOverride: ""
+  fullnameOverride: ""
+  
+  serviceAccount:
+    create: true
+    annotations: {}
+    name: ""
+  
+  podAnnotations: {}
+  
+  podSecurityContext:
+    runAsNonRoot: true
+    runAsUser: 1000
+    fsGroup: 1000
+  
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+      - ALL
+    readOnlyRootFilesystem: false
+  
+  service:
+    type: ClusterIP
+    port: 8001
+    targetPort: 8001
+    annotations: {}
+  
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+    requests:
+      cpu: 250m
+      memory: 256Mi
+  
+  autoscaling:
+    enabled: false
+    minReplicas: 2
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 70
+    targetMemoryUtilizationPercentage: 80
+  
+  nodeSelector: {}
+  
+  tolerations: []
+  
+  affinity: {}
+  
+  livenessProbe:
+    httpGet:
+      path: /health
+      port: 8001
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+  
+  readinessProbe:
+    httpGet:
+      path: /health
+      port: 8001
+    initialDelaySeconds: 10
+    periodSeconds: 5
+    timeoutSeconds: 3
+    failureThreshold: 3
+  
+  # Environment variables specific to backend (merged with global.env)
+  env: {}
+
+# Frontend Service Configuration
+frontend:
+  enabled: true
+  replicaCount: 2
+  
+  image:
+    repository: personasay/frontend
+    pullPolicy: IfNotPresent
+    tag: "1.0.0"
+  
+  imagePullSecrets: []
+  nameOverride: ""
+  fullnameOverride: ""
+  
+  serviceAccount:
+    create: true
+    annotations: {}
+    name: ""
+  
+  podAnnotations: {}
+  
+  podSecurityContext:
+    runAsNonRoot: true
+    runAsUser: 101  # nginx user
+    fsGroup: 101
+  
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+      - ALL
+    readOnlyRootFilesystem: false
+  
+  service:
+    type: ClusterIP
+    port: 80
+    targetPort: 80
+    annotations: {}
+  
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+  
+  autoscaling:
+    enabled: false
+    minReplicas: 2
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 70
+    targetMemoryUtilizationPercentage: 80
+  
+  nodeSelector: {}
+  
+  tolerations: []
+  
+  affinity: {}
+  
+  livenessProbe:
+    httpGet:
+      path: /health
+      port: 80
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 3
+    failureThreshold: 3
+  
+  readinessProbe:
+    httpGet:
+      path: /health
+      port: 80
+    initialDelaySeconds: 5
+    periodSeconds: 5
+    timeoutSeconds: 3
+    failureThreshold: 3
+  
+  # Nginx configuration can be customized via ConfigMap
+  nginxConfig: ""
+
+# Ingress Configuration
+ingress:
+  enabled: false
+  className: "nginx"
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    # Increase timeout for long-running AI requests
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "60"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "60"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "60"
+  hosts:
+    - host: personasay.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+          backend: frontend
+        - path: /api
+          pathType: Prefix
+          backend: backend
+  tls:
+    - secretName: personasay-tls
+      hosts:
+        - personasay.example.com
+
+# PostgreSQL Database (Optional)
+postgresql:
+  enabled: false
+  auth:
+    username: personasay
+    password: changeme
+    database: personasay
+  primary:
+    persistence:
+      enabled: true
+      size: 10Gi
+  resources:
+    limits:
+      memory: 1Gi
+      cpu: 500m
+    requests:
+      memory: 256Mi
+      cpu: 100m
+
+# Redis Cache (Optional)
+redis:
+  enabled: false
+  auth:
+    enabled: true
+    password: changeme
+  master:
+    persistence:
+      enabled: true
+      size: 1Gi
+  resources:
+    limits:
+      memory: 512Mi
+      cpu: 250m
+    requests:
+      memory: 128Mi
+      cpu: 50m
+
+# Secret Management
+secrets:
+  # Create secrets from values (not recommended for production)
+  createFromValues: false
+  # Use external secret management (recommended)
+  # Options: external-secrets, sealed-secrets, vault
+  externalSecretsOperator:
+    enabled: false
+    secretStore: ""
+    refreshInterval: "1h"
+
+# Monitoring and Observability
+monitoring:
+  enabled: false
+  serviceMonitor:
+    enabled: false
+    interval: 30s
+  grafanaDashboard:
+    enabled: false
+

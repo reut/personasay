@@ -1,0 +1,37 @@
+# Core Dependencies
+fastapi==0.104.1
+uvicorn==0.24.0
+pydantic>=2.0.0
+python-multipart==0.0.6
+
+# OpenAI
+openai>=1.6.1
+
+# HTTP Client
+# Pinned to <0.28 for compatibility with Starlette 0.27.0 TestClient
+httpx>=0.24.0,<0.28
+
+# LangChain Stack - Official LangChain.com
+# Pinned to <1.0 to maintain compatibility with AgentExecutor API
+langchain>=0.3.0,<1.0
+langchain-openai>=0.2.0,<1.0
+langchain-community>=0.3.0,<1.0
+langchain-core>=0.3.0,<1.0
+langsmith>=0.1.0
+
+# Database & Persistence
+sqlalchemy>=2.0.0
+psycopg2-binary>=2.9.0  # PostgreSQL for production
+alembic>=1.13.0  # Database migrations
+
+# System monitoring
+psutil>=5.9.0  # For system health monitoring
+
+# Memory & Storage
+redis>=5.0.0  # For session storage
+chromadb>=0.4.0  # Vector database for semantic memory
+
+# Utilities
+python-dotenv>=1.0.0
+pydantic-settings>=2.0.0
+aiofiles>=23.0.0

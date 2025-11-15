@@ -1,0 +1,16 @@
+product:
+  name: "LSports AI Feedback System"
+  description: "AI-powered feedback system for sports betting platform"
+  version: "1.0.0"
+  
+context:
+  - "User interface needs improvement based on customer feedback"
+  - "Backend performance optimization required"
+  - "Integration with third-party APIs needed"
+  - "Mobile app development in progress"
+  
+requirements:
+  - "Real-time data processing"
+  - "Multi-language support"
+  - "Responsive design"
+  - "API rate limiting" 

@@ -1,0 +1,23 @@
+[flake8]
+max-line-length = 100
+extend-ignore = E203,E501,W503,E402,F824,B008,D100,D101,D102,D103,D104,D105,D106,D107,D200,D202,D205,D400,D401,D403
+exclude =
+    .git,
+    __pycache__,
+    .venv,
+    venv,
+    build,
+    dist,
+    *.egg-info,
+    htmlcov,
+    archive,
+    .pytest_cache,
+    .mypy_cache,
+    server_old.py,
+    server_new.py
+per-file-ignores =
+    __init__.py:F401,E402
+    tests/*:F401,F541,F841,B007
+    app/routes/*:B008
+max-complexity = 30
+

@@ -1,0 +1,34 @@
+[MASTER]
+ignore=venv,.venv,build,dist,htmlcov,archive
+jobs=0
+persistent=yes
+
+[MESSAGES CONTROL]
+disable=
+    C0103,  # Invalid name
+    C0114,  # Missing module docstring
+    C0115,  # Missing class docstring
+    C0116,  # Missing function docstring
+    R0903,  # Too few public methods
+    R0913,  # Too many arguments
+    R0914,  # Too many local variables
+    W0212,  # Access to protected member
+    W0511,  # TODO/FIXME comments
+    E1101,  # No member (false positives with SQLAlchemy)
+    R0801,  # Similar lines in multiple files
+
+[FORMAT]
+max-line-length=100
+indent-string='    '
+
+[BASIC]
+good-names=i,j,k,ex,Run,_,id,db,fd,logger
+
+[DESIGN]
+max-args=7
+max-attributes=10
+max-locals=20
+
+[SIMILARITIES]
+min-similarity-lines=10
+

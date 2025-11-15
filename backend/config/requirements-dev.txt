@@ -1,0 +1,30 @@
+# Development & Testing Dependencies
+# Install with: pip install -r requirements.txt -r requirements-dev.txt
+
+# Include production dependencies
+-r requirements.txt
+
+# Testing
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+pytest-cov>=4.1.0
+pytest-mock>=3.11.0
+
+# Test HTTP client
+httpx>=0.24.0
+
+# Code Quality & Formatting
+black>=23.0.0              # Code formatter
+isort>=5.12.0              # Import sorter
+flake8>=6.0.0              # Style guide enforcement
+pylint>=3.0.0              # Comprehensive linter
+mypy>=1.4.0                # Static type checker
+
+# Flake8 plugins
+flake8-docstrings>=1.7.0   # Docstring style
+flake8-bugbear>=23.0.0     # Find bugs and design problems
+flake8-comprehensions>=3.14.0  # Better list/set/dict comprehensions
+
+# Development tools
+ipython>=8.14.0
+

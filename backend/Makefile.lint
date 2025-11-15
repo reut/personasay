@@ -1,0 +1,69 @@
+# Code Quality Makefile for PersonaSay Backend
+# Run linters and formatters
+
+.PHONY: help format lint check test clean
+
+help:
+	@echo "PersonaSay Backend - Code Quality Commands"
+	@echo ""
+	@echo "  make format    - Format code with black and isort"
+	@echo "  make lint      - Run all linters (flake8, pylint, mypy)"
+	@echo "  make check     - Check code without changing (black --check, isort --check)"
+	@echo "  make test      - Run tests with pytest"
+	@echo "  make clean     - Remove cache files"
+	@echo "  make all       - Format, lint, and test"
+	@echo ""
+
+# Format code
+format:
+	@echo "🎨 Formatting code with black..."
+	@black app/ tests/
+	@echo ""
+	@echo "📦 Sorting imports with isort..."
+	@isort app/ tests/
+	@echo ""
+	@echo "✅ Code formatting complete!"
+
+# Check formatting without changes
+check:
+	@echo "🔍 Checking code format with black..."
+	@black --check app/ tests/
+	@echo ""
+	@echo "🔍 Checking import order with isort..."
+	@isort --check-only app/ tests/
+	@echo ""
+	@echo "✅ Code format check complete!"
+
+# Run linters
+lint:
+	@echo "🔍 Running flake8..."
+	@flake8 app/ tests/ || true
+	@echo ""
+	@echo "🔍 Running pylint..."
+	@pylint app/ || true
+	@echo ""
+	@echo "🔍 Running mypy..."
+	@mypy app/ || true
+	@echo ""
+	@echo "✅ Linting complete!"
+
+# Run tests
+test:
+	@echo "🧪 Running tests with pytest..."
+	@pytest tests/ -v
+
+# Clean cache files
+clean:
+	@echo "🧹 Cleaning cache files..."
+	@find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
+	@find . -type d -name ".mypy_cache" -exec rm -rf {} + 2>/dev/null || true
+	@find . -type d -name ".pytest_cache" -exec rm -rf {} + 2>/dev/null || true
+	@find . -type f -name "*.pyc" -delete 2>/dev/null || true
+	@rm -rf htmlcov/ .coverage
+	@echo "✅ Clean complete!"
+
+# Run everything
+all: format lint test
+	@echo ""
+	@echo "✅ All checks complete!"
+

@@ -1,0 +1,18 @@
+{{- if .Values.backend.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "personasay.fullname" . }}-backend-config
+  labels:
+    {{- include "personasay.backend.labels" . | nindent 4 }}
+data:
+  {{- $globalEnv := .Values.global.env | default dict }}
+  {{- $backendEnv := .Values.backend.env | default dict }}
+  {{- $mergedEnv := merge $backendEnv $globalEnv }}
+  {{- range $key, $value := $mergedEnv }}
+  {{- if ne $key "OPENAI_API_KEY" }}
+  {{ $key }}: {{ $value | quote }}
+  {{- end }}
+  {{- end }}
+{{- end }}
+

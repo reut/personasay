@@ -1,0 +1,80 @@
+# Development Values for PersonaSay
+# Usage: helm install personasay ./helm/personasay -f values-development.yaml
+
+global:
+  env:
+    # OpenAI Configuration
+    OPENAI_API_KEY: ""  # Set via --set or use development key
+    
+    # Development settings
+    ENVIRONMENT: "development"
+    DEBUG: "false"
+    PORT: "8001"
+    HOST: "0.0.0.0"
+    
+    # Logging for development
+    LOG_LEVEL: "INFO"
+    LOG_TO_FILE: "true"
+    
+    # Security (development defaults)
+    SECRET_KEY: "dev-secret-key-change-in-production"
+    CORS_ORIGINS: "http://localhost:3000,http://localhost:5173"
+    
+    # Database
+    DATABASE_URL: "sqlite:///./data/personasay.db"
+    
+    # Optional: Redis for development
+    REDIS_URL: ""
+
+backend:
+  enabled: true
+  replicaCount: 1  # Single replica for dev
+  
+  image:
+    repository: personasay/backend
+    tag: "latest"
+    pullPolicy: Always  # Always pull latest for dev
+  
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+  
+  autoscaling:
+    enabled: false  # No autoscaling in dev
+
+frontend:
+  enabled: true
+  replicaCount: 1
+  
+  image:
+    repository: personasay/frontend
+    tag: "latest"
+    pullPolicy: Always
+  
+  resources:
+    limits:
+      cpu: 500m
+      memory: 256Mi
+    requests:
+      cpu: 50m
+      memory: 64Mi
+  
+  autoscaling:
+    enabled: false
+
+ingress:
+  enabled: false  # Use port-forward for dev
+  
+postgresql:
+  enabled: false
+
+redis:
+  enabled: false
+
+secrets:
+  createFromValues: true  # OK for dev environment
+

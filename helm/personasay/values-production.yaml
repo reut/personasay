@@ -1,0 +1,160 @@
+# Production Values for PersonaSay
+# Usage: helm install personasay ./helm/personasay -f values-production.yaml
+
+global:
+  env:
+    # REQUIRED: Set your OpenAI API key (use Kubernetes secrets in production)
+    OPENAI_API_KEY: ""  # Set via --set or external secret management
+    
+    # Production settings
+    ENVIRONMENT: "production"
+    DEBUG: "false"
+    PORT: "8001"
+    HOST: "0.0.0.0"
+    
+    # Logging for production
+    LOG_LEVEL: "WARNING"
+    LOG_TO_FILE: "true"
+    
+    # REQUIRED: Security settings
+    SECRET_KEY: ""  # Generate with: python -c "import secrets; print(secrets.token_urlsafe(32))"
+    CORS_ORIGINS: "https://personasay.yourdomain.com"  # UPDATE with your domain
+    
+    # Database - Use PostgreSQL for production
+    DATABASE_URL: "postgresql://personasay:password@postgresql:5432/personasay"
+    # For SQLite (not recommended for production): sqlite:///./data/personasay.db
+    
+    # Optional: Redis cache
+    REDIS_URL: "redis://:changeme@redis-master:6379"
+
+backend:
+  enabled: true
+  replicaCount: 3
+  
+  image:
+    repository: your-registry.com/personasay/backend  # UPDATE THIS
+    tag: "1.0.0"
+    pullPolicy: IfNotPresent
+  
+  resources:
+    limits:
+      cpu: 2000m
+      memory: 2Gi
+    requests:
+      cpu: 500m
+      memory: 512Mi
+  
+  autoscaling:
+    enabled: true
+    minReplicas: 3
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 70
+    targetMemoryUtilizationPercentage: 80
+  
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/component: backend
+          topologyKey: kubernetes.io/hostname
+
+frontend:
+  enabled: true
+  replicaCount: 2
+  
+  image:
+    repository: your-registry.com/personasay/frontend  # UPDATE THIS
+    tag: "1.0.0"
+    pullPolicy: IfNotPresent
+  
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 512Mi
+    requests:
+      cpu: 200m
+      memory: 128Mi
+  
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 5
+    targetCPUUtilizationPercentage: 70
+
+ingress:
+  enabled: true
+  className: "nginx"
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "60"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "60"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "60"
+    nginx.ingress.kubernetes.io/proxy-body-size: "10m"
+  hosts:
+    - host: personasay.yourdomain.com  # UPDATE THIS
+      paths:
+        - path: /
+          pathType: Prefix
+          backend: frontend
+        - path: /api
+          pathType: Prefix
+          backend: backend
+  tls:
+    - secretName: personasay-tls
+      hosts:
+        - personasay.yourdomain.com  # UPDATE THIS
+
+# Optional: Enable PostgreSQL
+postgresql:
+  enabled: false
+  auth:
+    username: personasay
+    password: changeme  # Use strong password or external secret
+    database: personasay
+  primary:
+    persistence:
+      enabled: true
+      size: 20Gi
+      storageClass: ""  # Use your storage class
+  resources:
+    limits:
+      memory: 2Gi
+      cpu: 1000m
+    requests:
+      memory: 512Mi
+      cpu: 250m
+
+# Optional: Enable Redis cache
+redis:
+  enabled: false
+  auth:
+    enabled: true
+    password: changeme  # Use strong password or external secret
+  master:
+    persistence:
+      enabled: true
+      size: 2Gi
+      storageClass: ""  # Use your storage class
+  resources:
+    limits:
+      memory: 1Gi
+      cpu: 500m
+    requests:
+      memory: 256Mi
+      cpu: 100m
+
+secrets:
+  # Don't create secrets from values in production
+  # Use Kubernetes secrets or external secret management
+  createFromValues: false
+  
+monitoring:
+  enabled: false
+  serviceMonitor:
+    enabled: false
+
