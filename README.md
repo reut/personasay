@@ -314,6 +314,7 @@ Each of the 7 personas has:
 | **John** | Customer Support Lead | Incident response, reliability | Reactive support, unclear status |
 | **Rachel** | In-Play Trader | Real-time trading, latency | Mid-game alerts, manual provider switching |
 
+
 ### Product Documentation Service
 
 **Hybrid Content Architecture:**
@@ -573,32 +574,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Email**: your-email@example.com
 
 ---
-
-## Roadmap
-
-### Current (v1.0)
-- [x] 7 specialized personas with unique empathy maps
-- [x] @Mention system for targeted responses
-- [x] File attachment support (images + documents)
-- [x] Visual mock generation (SVG)
-- [x] AI-powered summary with Word export
-- [x] Hybrid LSports content service
-
-### In Progress (v1.1)
-- [ ] Persistent conversation history
-- [ ] LangChain integration for advanced memory
-- [ ] Docker deployment configuration
-- [ ] Unit tests and CI/CD pipeline
-
-### Future (v2.0+)
-- [ ] Custom persona creation
-- [ ] Voice interaction capabilities
-- [ ] Real-time collaboration (multi-user sessions)
-- [ ] Advanced analytics dashboard
-- [ ] Mobile application
-
----
-
-**Built with love for product teams who want diverse perspectives**
 
 *PersonaSay simulates expert feedback, but remember: real user research is irreplaceable!*
