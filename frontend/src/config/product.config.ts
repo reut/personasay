@@ -32,8 +32,8 @@ export interface ProductContext {
  */
 export const productContext: ProductContext = {
   name: "BOOST by LSports",
-  tagline: "Empower Your Sportsbook with Data-Driven Insights",
-  description: "BOOST is a comprehensive sports betting analytics platform designed to help sportsbook operators evaluate and compare odds feed provider performance across pre-match and in-play sports markets.",
+  tagline: "Provider Performance Analytics Platform",
+  description: "BOOST is LSports' centralized, data-driven performance analytics platform designed to help sportsbook operators evaluate, compare, and optimize their sportsbook content across multiple providers. It provides full visibility into market coverage, uptime, and pricing competitiveness – empowering trading and operations teams to make smarter, data-backed decisions.",
   industry: "Sports Betting & iGaming",
   
   target_users: [
@@ -46,14 +46,16 @@ export const productContext: ProductContext = {
   ],
   
   key_features: [
-    "Real-time odds feed monitoring across multiple providers",
-    "Coverage analysis by sport, league, and market type",
-    "Uptime and latency tracking with SLA compliance",
-    "Settlement accuracy and payout reconciliation",
-    "Provider performance comparison dashboards",
-    "Custom alerts for coverage gaps and outages",
-    "Historical data analysis and trend reporting",
-    "Multi-currency and multi-sport support"
+    "Benchmark Comparison Module: Full comparative view of fixture & market coverage across providers",
+    "Measure coverage levels across sports, competitions, fixtures and markets",
+    "Identify missing or delayed fixtures and markets per provider",
+    "Compare pre-match and in-play coverage availability",
+    "Trading Performance Module: Track market uptime (pre-match and in-play)",
+    "Compare margins to assess pricing competitiveness",
+    "Monitor overall performance to support trading optimization",
+    "Intuitive dashboards and comparison tables for analytics and reporting",
+    "Export data or generate scheduled reports",
+    "Integration with LSports TRADE for market adjustments"
   ],
   
   pain_points: [
@@ -69,7 +71,7 @@ export const productContext: ProductContext = {
   
   value_proposition: "BOOST provides sportsbook operators with the data transparency and actionable insights needed to optimize odds feed provider selection, improve market coverage, reduce settlement errors, and ultimately increase customer satisfaction and GGR.",
   
-  technical_context: "BOOST integrates with major odds feed providers (LSports, Betradar, BetGenius, etc.) via standardized APIs, ingests real-time data streams, and provides a unified analytics dashboard. The platform supports both pre-match and in-play betting markets across 50+ sports."
+  technical_context: "BOOST consolidates sports data from multiple providers into a unified analytical layer. For TRADE integrated customers, all subscriptions (fixtures, markets, sports, competitions) are reflected in BOOST with near real-time updates. When coverage gaps or downtime are detected, traders can navigate directly to TRADE to adjust, open, or close markets efficiently."
 };
 
 /**

@@ -14,6 +14,7 @@ from app.dependencies import (
 from app.langchain_personas import LangChainPersonaManager
 from app.logging_config import get_logger
 from app.models import AppSettings, InitializeRequest
+from config.product_config import get_product_context
 
 router = APIRouter(tags=["system"])
 logger = get_logger(__name__)
@@ -215,3 +216,31 @@ if app_settings.environment == "development":
             "message": "Test personas available for development",
             "count": len(test_personas),
         }
+
+
+@router.get("/product/config")
+async def get_product_config():
+    """
+    Get product configuration.
+    
+    Returns complete product context including:
+    - Name, tagline, description
+    - Target users
+    - Key features
+    - Pain points
+    - Value proposition
+    - Technical context
+    - Mock generation context
+    
+    This is the single source of truth for product information.
+    Frontend should fetch this on startup instead of using hardcoded config.
+    """
+    try:
+        config = get_product_context()
+        return {
+            "success": True,
+            "product": config
+        }
+    except Exception as e:
+        logger.error(f"Error fetching product config: {e}")
+        raise HTTPException(status_code=500, detail="Failed to fetch product configuration")
