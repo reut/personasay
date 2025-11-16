@@ -16,6 +16,7 @@ from app.dependencies import (
 from app.langchain_personas import LangChainPersonaAgent, LangChainPersonaManager
 from app.logging_config import get_logger
 from app.models import DebateRequest
+from config.product_config import PRODUCT_SHORT_NAME, COMPANY_INDUSTRY
 
 router = APIRouter(tags=["debate"])
 logger = get_logger(__name__)
@@ -126,8 +127,8 @@ You are in a CONVERSATION, not giving isolated speeches. Engage with what others
 
 {'User interjection: ' + request.user_message if request.user_message else ''}
 
-IDENTITY REMINDER: You are a CUSTOMER/USER from the betting operator industry, NOT a BOOST employee.
-Speak from YOUR company's perspective as someone who uses or evaluates betting data provider services."""
+IDENTITY REMINDER: You are a CUSTOMER/USER from the {COMPANY_INDUSTRY}, NOT a {PRODUCT_SHORT_NAME} employee.
+Speak from YOUR company's perspective as someone who uses or evaluates these services."""
 
         # Get responses from all participants
         responses = await langchain_manager.get_all_responses(
@@ -283,8 +284,8 @@ You are in a CONVERSATION, not giving isolated speeches. Engage with what others
 
 {'User interjection: ' + user_message if user_message else ''}
 
-IDENTITY REMINDER: You are a CUSTOMER/USER from the betting operator industry, NOT a BOOST employee.
-Speak from YOUR company's perspective as someone who uses or evaluates betting data provider services."""
+IDENTITY REMINDER: You are a CUSTOMER/USER from the {COMPANY_INDUSTRY}, NOT a {PRODUCT_SHORT_NAME} employee.
+Speak from YOUR company's perspective as someone who uses or evaluates these services."""
 
         # Get responses from all participants
         responses = await langchain_manager.get_all_responses(

@@ -62,7 +62,7 @@ export const personasData: Persona[] = [
     title: "Trading Manager",
     company: "Big Operator",
     avatar: "/avatars/alex.png",
-    role: "Trading Manager (BOOST)",
+    role: "Trading Manager",
     person_perspective: "As a trading manager, I need one streamlined view to oversee all provider performance, enabling quick decisions about market coverage and provider strategy to maximize GGR and customer satisfaction.",
     empathy_map: {
       think_and_feel: [
@@ -118,7 +118,7 @@ export const personasData: Persona[] = [
     title: "Senior Trader",
     company: "Big Operator",
     avatar: "/avatars/ben.png",
-    role: "Senior Trader (BOOST)",
+    role: "Senior Trader",
     person_perspective: "As a senior trader, I need instant visibility into live market performance and provider reliability so I can make split-second decisions during events and ensure our odds remain competitive.",
     empathy_map: {
       think_and_feel: [
@@ -174,7 +174,7 @@ export const personasData: Persona[] = [
     title: "Product Owner",
     company: "Small Operator",
     avatar: "/avatars/nina.png",
-    role: "Product Owner (BOOST)",
+    role: "Product Owner",
     person_perspective: "As a product owner, I need to understand user pain points and translate provider performance data into actionable features that improve trader efficiency and customer experience.",
     empathy_map: {
       think_and_feel: [
@@ -210,13 +210,13 @@ export const personasData: Persona[] = [
         "Hard to quantify the ROI of improving trader tools",
         "Traders have urgent needs but limited dev resources",
         "Stakeholders want flashy features, traders want efficiency",
-        "Lack of clear metrics to measure success of BOOST features",
+        "Lack of clear metrics to measure success of product features",
         "Difficult to get traders' time for research and testing",
         "Provider APIs change without notice, breaking our integrations"
       ],
       gain: [
         "Features that traders actually use and love daily",
-        "Clear metrics showing how BOOST improves trading efficiency",
+        "Clear metrics showing how the platform improves trading efficiency",
         "Reduced support tickets due to better coverage visibility",
         "Trader retention because our tools are best-in-class",
         "Executive buy-in for product roadmap with usage data",
@@ -230,7 +230,7 @@ export const personasData: Persona[] = [
     title: "Performance Analyst",
     company: "Medium Operator",
     avatar: "/avatars/clara.png",
-    role: "Performance Analyst (BOOST)",
+    role: "Performance Analyst",
     person_perspective: "As a performance analyst, I need clean, historical data across all providers to identify trends, calculate ROI, and make data-driven recommendations about provider strategy.",
     empathy_map: {
       think_and_feel: [
@@ -286,7 +286,7 @@ export const personasData: Persona[] = [
     title: "VP of Trading",
     company: "Big Operator",
     avatar: "/avatars/marco.png",
-    role: "VP of Trading (BOOST)",
+    role: "VP of Trading",
     person_perspective: "As VP of Trading, I need high-level KPIs and strategic insights to ensure our provider mix supports business goals, manage multi-million dollar contracts, and drive competitive advantage.",
     empathy_map: {
       think_and_feel: [
@@ -342,7 +342,7 @@ export const personasData: Persona[] = [
     title: "Head of Operations",
     company: "Medium Operator",
     avatar: "/avatars/john.png",
-    role: "Head of Operations (BOOST)",
+    role: "Head of Operations",
     person_perspective: "As Head of Operations, I need to ensure our trading infrastructure is reliable, scalable, and cost-effective, while minimizing operational overhead for the team.",
     empathy_map: {
       think_and_feel: [
@@ -398,7 +398,7 @@ export const personasData: Persona[] = [
     title: "Customer Support Lead",
     company: "Small Operator",
     avatar: "/avatars/rachel.png",
-    role: "Customer Support Lead (BOOST)",
+    role: "Customer Support Lead",
     person_perspective: "As Customer Support Lead, I need to quickly understand the root cause of customer issues related to markets and settlements so my team can resolve tickets efficiently and maintain customer trust.",
     empathy_map: {
       think_and_feel: [

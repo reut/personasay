@@ -62,7 +62,7 @@ PersonaSay provides instant, multi-perspective feedback from AI personas represe
 ## Features
 
 ### Multi-Persona Conversations
-- **Customizable Personas**: Default includes 7 sports betting personas (Trading Manager, Performance Analyst, Product Owner, Risk Manager, etc.)
+- **Customizable Personas**: Default includes 7 example personas (various roles and seniorities)
 - **Empathy Map Structure**: Each persona has detailed think/feel, see, hear, say/do, pain, and gain profiles
 - **@Mention System**: Target specific personas with `@name` syntax
 - **Parallel Processing**: Get responses from multiple personas simultaneously
@@ -78,7 +78,7 @@ PersonaSay provides instant, multi-perspective feedback from AI personas represe
 - **SVG Mockups**: Request personas to generate visual mockups and wireframes
 - **Toggle Control**: Enable/disable mock generation per message
 - **Expand View**: Full-screen SVG preview for better visibility
-- **Context-Aware**: Mockups reflect BOOST platform conventions and user needs
+- **Context-Aware**: Mockups reflect your product conventions and user needs
 
 ### AI-Powered Summaries
 - **Conversation Analysis**: Distill lengthy discussions into key insights
@@ -301,7 +301,7 @@ User Enables Mock Toggle → Backend receives generate_mock=true
 Each of the 7 personas has:
 - **Empathy Map**: Think/Feel, Hear, See, Say/Do, Pain, Gain
 - **Role-Specific Context**: Job title, company type, responsibilities
-- **Domain Expertise**: BOOST features, LSports products, industry knowledge
+- **Domain Expertise**: Product features, domain knowledge, industry expertise
 - **Personality Traits**: Communication style, priorities, decision-making approach
 
 | Persona | Role | Focus Area | Key Pain Points |
@@ -314,20 +314,28 @@ Each of the 7 personas has:
 | **John** | Customer Support Lead | Incident response, reliability | Reactive support, unclear status |
 | **Rachel** | In-Play Trader | Real-time trading, latency | Mid-game alerts, manual provider switching |
 
-### LSports Content Service
+### Product Documentation Service
 
 **Hybrid Content Architecture:**
-- **Static Content** (14 features): Hardcoded BOOST platform knowledge
-- **Dynamic Content** (20+ items): Live-scraped from LSports documentation
-- **Refresh Mechanism**: Automatic content updates on first request per session
+- **Static Content**: Hardcoded fallback features for reliable baseline knowledge
+- **Dynamic Content**: Live-scraped from your product documentation
+- **Automatic Discovery**: Recursive crawling finds all related documentation pages
+- **Refresh Mechanism**: Configurable automatic content updates (default: every 6 hours)
 - **Fallback Strategy**: Graceful degradation to static content if scraping fails
 
-**Content Sources:**
-- BOOST platform features and capabilities
-- Coverage Hub analytics and provider rankings
-- Settlement Coverage reports
-- Livescore Coverage incident data
-- LSports data feeds and offerings
+**How It Works:**
+1. Configure with your documentation URL
+2. Service automatically discovers and scrapes all subpages
+3. Extracted features are cached and formatted for AI context
+4. Personas receive comprehensive, up-to-date product knowledge
+
+**Default Example** (LSports BOOST):
+- Static baseline: 8 core features
+- Dynamic scraped: 20+ features from docs.lsports.eu
+- Automatic crawl depth: 2 levels
+- Updates every 6 hours
+
+**Customization:** See `backend/services/README.md` for configuration guide
 
 ---
 

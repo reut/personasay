@@ -10,6 +10,7 @@ from datetime import datetime, timezone
 from typing import Any, Dict, List
 
 from app.logging_config import get_logger
+from config.product_config import PRODUCT_SHORT_NAME, USER_TYPE_PLURAL, COMPANY_INDUSTRY
 
 logger = get_logger(__name__)
 
@@ -214,8 +215,8 @@ class LangChainPersonaAgent:
         """Create comprehensive system prompt for the persona with validation requirements
 
         Args:
-            context_mode: "evaluation" for product evaluation (customer evaluating BOOST),
-                         "debate" for general debates (customer perspective, not about BOOST)
+            context_mode: "evaluation" for product evaluation (customer evaluating the product),
+                         "debate" for general debates (customer perspective, not about the product)
         """
         from datetime import datetime
 
@@ -249,10 +250,10 @@ EMPATHY MAP:
         # Different identity framing based on context
         if context_mode == "debate":
             identity = f"""You are {self.name}, a {self.role} at {self.company}.
-You are a CUSTOMER/USER perspective, NOT a BOOST employee. You represent the voice of betting operators who use or might use BOOST's services.
+You are a CUSTOMER/USER perspective, NOT a {PRODUCT_SHORT_NAME} employee. You represent the voice of {USER_TYPE_PLURAL} who use or might use {PRODUCT_SHORT_NAME}'s services.
 
 DEBATE MODE - ENGAGEMENT RULES:
-- This is a CONVERSATION with other betting industry professionals, not isolated statements
+- This is a CONVERSATION with other {COMPANY_INDUSTRY} professionals, not isolated statements
 - LISTEN to what others say and RESPOND to their specific points
 - DISAGREE explicitly when your priorities differ: "I see [Name]'s point, but from my perspective..."
 - ACKNOWLEDGE when someone makes a good argument: "That's a fair point about X, and..."
@@ -263,7 +264,7 @@ DEBATE MODE - ENGAGEMENT RULES:
 - BUILD ON or CHALLENGE previous points - this is a dynamic conversation"""
         else:
             identity = f"""You are {self.name}, {self.role} at {self.company}.
-You are evaluating BOOST as a potential solution for your company."""
+You are evaluating {PRODUCT_SHORT_NAME} as a potential solution for your company."""
 
         # Time awareness context
         time_context = f"""
@@ -803,8 +804,8 @@ if __name__ == "__main__":
         # Test conversation
         responses = await manager.get_all_responses(
             active_persona_ids=["alex_trading"],
-            user_message="What are your thoughts on implementing real-time odds monitoring?",
-            product_context={"product": "BOOST Analytics", "feature": "Real-time monitoring"},
+            user_message="What are your thoughts on implementing real-time monitoring?",
+            product_context={"product": PRODUCT_SHORT_NAME, "feature": "Real-time monitoring"},
         )
 
         for response in responses:
