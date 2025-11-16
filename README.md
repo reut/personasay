@@ -3,7 +3,7 @@
 **LangChain-Powered Multi-Persona AI Framework**
 
 > **Fully Customizable Open-Source Template**  
-> Default configuration showcases Sports Betting Analytics (LSports BOOST), but **easily adaptable to ANY industry or product**!  
+> Default configuration showcases Sports Betting Analytics product, but **easily adaptable to ANY industry or product**!  
 > See [CUSTOMIZATION_GUIDE.md](docs/CUSTOMIZATION_GUIDE.md) to make PersonaSay your own.
 
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
@@ -86,7 +86,7 @@ PersonaSay provides instant, multi-perspective feedback from AI personas represe
 - **Export to Word**: Download summaries as `.docx` files for sharing
 
 ### Product Context Integration
-- **Configurable Context**: Pre-configured with LSports BOOST (sports betting analytics) as an example
+- **Configurable Context**: Pre-configured with sports betting analytics product as an example
 - **Easy Replacement**: Edit `frontend/src/config/product.config.ts` to define your own product
 - **Domain-Specific**: Personas automatically adapt to your industry and product context
 - **Mock Generation**: Visual mockups (SVG) are generated based on your domain keywords
@@ -330,9 +330,9 @@ Each of the 7 personas has:
 3. Extracted features are cached and formatted for AI context
 4. Personas receive comprehensive, up-to-date product knowledge
 
-**Default Example** (LSports BOOST):
+**Default Example**:
 - Static baseline: 8 core features
-- Dynamic scraped: 20+ features from docs.lsports.eu
+- Dynamic scraped: 20+ features from product user guides url
 - Automatic crawl depth: 2 levels
 - Updates every 6 hours
 
@@ -561,7 +561,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Acknowledgments
 
 - **OpenAI** for GPT-4o API
-- **LSports** for BOOST platform domain knowledge
 - **FastAPI** and **React** communities for excellent frameworks
 - All contributors and testers
 
