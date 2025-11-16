@@ -4,7 +4,7 @@
 
 > **Fully Customizable Open-Source Template**  
 > Default configuration showcases Sports Betting Analytics (LSports BOOST), but **easily adaptable to ANY industry or product**!  
-> See [CUSTOMIZATION_GUIDE.md](CUSTOMIZATION_GUIDE.md) to make PersonaSay your own.
+> See [CUSTOMIZATION_GUIDE.md](docs/CUSTOMIZATION_GUIDE.md) to make PersonaSay your own.
 
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![LangChain](https://img.shields.io/badge/LangChain-0.3+-blue.svg)](https://python.langchain.com/)
@@ -66,7 +66,7 @@ PersonaSay provides instant, multi-perspective feedback from AI personas represe
 - **Empathy Map Structure**: Each persona has detailed think/feel, see, hear, say/do, pain, and gain profiles
 - **@Mention System**: Target specific personas with `@name` syntax
 - **Parallel Processing**: Get responses from multiple personas simultaneously
-- **Easy Customization**: Replace default personas with your own industry experts ([guide](CUSTOMIZATION_GUIDE.md))
+- **Easy Customization**: Replace default personas with your own industry experts ([guide](docs/CUSTOMIZATION_GUIDE.md))
 
 ### File Attachments
 - **Image Support**: Upload screenshots and mockups (PNG, JPG, JPEG, WEBP)
@@ -95,9 +95,9 @@ PersonaSay provides instant, multi-perspective feedback from AI personas represe
 
 ## Quick Start
 
-**New to PersonaSay?** Check out [QUICKSTART.md](QUICKSTART.md) for the fastest path to getting started!
+**New to PersonaSay?** Check out [QUICKSTART.md](docs/QUICKSTART.md) for the fastest path to getting started!
 
-**Want to customize for your industry?** See [CUSTOMIZATION_GUIDE.md](CUSTOMIZATION_GUIDE.md) to replace personas and product context!
+**Want to customize for your industry?** See [CUSTOMIZATION_GUIDE.md](docs/CUSTOMIZATION_GUIDE.md) to replace personas and product context!
 
 ### Prerequisites
 
@@ -151,7 +151,7 @@ helm install personasay ./helm/personasay \
   --set frontend.image.repository="your-registry/personasay/frontend"
 ```
 
-**Detailed Instructions**: See [DEPLOYMENT.md](DEPLOYMENT.md) for complete deployment guide.
+**Detailed Instructions**: See [DEPLOYMENT.md](docs/DEPLOYMENT.md) for complete deployment guide.
 
 ---
 
@@ -465,7 +465,7 @@ export const config = {
 
 PersonaSay can be deployed **locally** for development or in **production** using Docker or Kubernetes (K8s).
 
-**Full deployment guide**: See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed instructions.
+**Full deployment guide**: See [DEPLOYMENT.md](docs/DEPLOYMENT.md) for detailed instructions.
 
 ### Quick Deployment Options
 
@@ -526,7 +526,7 @@ helm install personasay ./helm/personasay \
 
 ## Contributing
 
-We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+We welcome contributions! Please see [CONTRIBUTING.md](docs/CONTRIBUTING.md) for guidelines.
 
 ### Development Workflow
 1. Fork the repository

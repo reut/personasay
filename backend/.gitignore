@@ -44,9 +44,10 @@ config.env
 *.sqlite3
 data/personasay.db
 
-# Logs
+# Logs - ignore entire directory and all log files
 *.log
-logs/*.log
+logs/
+*.jsonl
 the_fixer.log
 
 # OS

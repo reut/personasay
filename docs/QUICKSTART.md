@@ -4,7 +4,7 @@ Get PersonaSay running in under 5 minutes!
 
 ## Choose Your Deployment Method
 
-### 🏠 Local Development (Fastest for Testing)
+### Local Development (Fastest for Testing)
 
 #### Option A: Automated Setup (Recommended)
 
@@ -71,7 +71,7 @@ cd frontend && npm run dev
 
 ---
 
-### 🐳 Docker Compose (Easiest for Quick Demo)
+### Docker Compose (Easiest for Quick Demo)
 
 ```bash
 # 1. Clone the repository
@@ -163,7 +163,7 @@ Only Alex will respond, regardless of selection.
 4. Send
 
 **Visual Mocks**: Request SVG mockups
-1. Click magic wand icon 🪄 (toggle ON)
+1. Click magic wand icon (toggle ON)
 2. Ask for a design: "Create a mock for the provider dashboard"
 3. Personas may include visual mockups
 4. Click expand icon to view full-screen
@@ -261,12 +261,12 @@ kubectl rollout restart deployment -n personasay personasay-backend
 
 ---
 
-## Next Steps
+## Additional Resources
 
-- Read full [README.md](README.md) for detailed features
-- See [DEPLOYMENT.md](DEPLOYMENT.md) for production deployment
-- Review Helm [values.yaml](helm/personasay/values.yaml) for all options
-- Check [CONTRIBUTING.md](CONTRIBUTING.md) if you want to contribute
+- [README.md](../README.md) - Full documentation and features
+- [DEPLOYMENT.md](DEPLOYMENT.md) - Production deployment guide
+- [CUSTOMIZATION_GUIDE.md](CUSTOMIZATION_GUIDE.md) - Customize for your industry
+- [CONTRIBUTING.md](CONTRIBUTING.md) - Contribution guidelines
 
 ---
 
@@ -302,7 +302,4 @@ helm upgrade personasay ./helm/personasay         # Upgrade
 
 ---
 
-**Questions?** Open an issue on GitHub or check the [full documentation](README.md).
-
-**Happy testing!** 🎭✨
-
+**Questions?** Open an issue on GitHub or check the [full documentation](../README.md).

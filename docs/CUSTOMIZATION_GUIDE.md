@@ -281,7 +281,7 @@ avatar: "https://yourcdn.com/avatars/alex.png"                 // Custom image
 
 ---
 
-## 🧪 Testing Your Customization
+## Testing Your Customization
 
 1. **Update configurations**:
    ```bash

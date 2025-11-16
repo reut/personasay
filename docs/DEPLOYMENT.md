@@ -610,7 +610,7 @@ curl http://personasay-frontend/health
 ## Support
 
 - **Issues**: [GitHub Issues](https://github.com/yourusername/personasay/issues)
-- **Documentation**: [README.md](README.md)
+- **Documentation**: [README.md](../README.md)
 - **Email**: your-email@example.com
 
 ---
