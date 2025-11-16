@@ -333,6 +333,20 @@ All environment variables can be configured via Helm's `global.env` values:
 | `REDIS_URL` | Redis cache URL | `""` | `--set global.env.REDIS_URL="redis://..."` |
 | `ENVIRONMENT` | Environment name | `production` | `--set global.env.ENVIRONMENT="staging"` |
 
+### Product Configuration Variables
+
+| Variable | Description | Default | Override Example |
+|----------|-------------|---------|------------------|
+| `PRODUCT_NAME` | Full product name | `BOOST by LSports` | `--set global.env.PRODUCT_NAME="YourProduct"` |
+| `PRODUCT_SHORT_NAME` | Short product name | `BOOST` | `--set global.env.PRODUCT_SHORT_NAME="YourProduct"` |
+| `PRODUCT_TAGLINE` | Product tagline | See config | `--set global.env.PRODUCT_TAGLINE="Your Tagline"` |
+| `PRODUCT_INDUSTRY` | Product industry | `Sports Betting & iGaming` | `--set global.env.PRODUCT_INDUSTRY="Your Industry"` |
+| `USER_TYPE` | Target user type | `sportsbook operator` | `--set global.env.USER_TYPE="your user type"` |
+| `USER_TYPE_PLURAL` | User type plural | `sportsbook operators` | `--set global.env.USER_TYPE_PLURAL="your users"` |
+| `COMPANY_INDUSTRY` | Company industry | `sports betting industry` | `--set global.env.COMPANY_INDUSTRY="your industry"` |
+
+**Note:** For full product context customization (features, pain points, etc.), edit `backend/config/product_config.py` directly.
+
 ### Helm Override Examples
 
 **Single Variable:**

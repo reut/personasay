@@ -86,10 +86,12 @@ PersonaSay provides instant, multi-perspective feedback from AI personas represe
 - **Export to Word**: Download summaries as `.docx` files for sharing
 
 ### Product Context Integration
-- **Configurable Context**: Pre-configured with sports betting analytics product as an example
-- **Easy Replacement**: Edit `frontend/src/config/product.config.ts` to define your own product
+- **Backend Configuration**: Centralized in `backend/config/product_config.py` as single source of truth
+- **API-Driven**: Frontend fetches config via `GET /product/config` endpoint
+- **Easy Customization**: Edit backend config file or set environment variables
 - **Domain-Specific**: Personas automatically adapt to your industry and product context
 - **Mock Generation**: Visual mockups (SVG) are generated based on your domain keywords
+- **Dynamic Updates**: Change product config without frontend redeployment
 
 ---
 
@@ -168,12 +170,18 @@ PersonaSay is a **LangChain-based multi-agent system** that orchestrates special
 ┌─────────────────────┐    ┌─────────────────────┐    ┌─────────────────────┐
 │   Frontend Client   │    │   FastAPI Gateway   │    │  LangChain Agents   │
 │   (React/TypeScript)│◄──►│   (LangChain API)   │◄──►│  (7 Personas)       │
-└─────────────────────┘    └─────────────────────┘    └─────────────────────┘
+└─────────────────────┘    └──────────┬──────────┘    └─────────────────────┘
                                       │                          │
                                       ▼                          ▼
                             ┌─────────────────────┐    ┌─────────────────────┐
                             │  Database Layer     │    │  OpenAI GPT-4o      │
                             │  (SQLite/PostgreSQL)│    │  (LLM Provider)     │
+                            └─────────────────────┘    └─────────────────────┘
+                                      │
+                                      ▼
+                            ┌─────────────────────┐    ┌─────────────────────┐
+                            │  Product Config     │    │  Product Docs       │
+                            │  (Backend Source)   │    │  Service (Dynamic)  │
                             └─────────────────────┘    └─────────────────────┘
 ```
 
@@ -237,8 +245,11 @@ GET  /langchain/memory/{id}    # Get persona memory
 GET  /langchain/conversation/{id} # Get conversation history
 POST /langchain/reset          # Reset system
 
-# Legacy Endpoints (backward compatible)
+# Configuration & System
+GET  /product/config           # Get product configuration (source of truth)
 GET  /health                   # Health check
+
+# Legacy Endpoints (backward compatible)
 POST /chat                     # Standard chat (routes to LangChain)
 POST /summary                  # Summary generation
 ```
@@ -314,6 +325,33 @@ Each of the 7 personas has:
 | **John** | Customer Support Lead | Incident response, reliability | Reactive support, unclear status |
 | **Rachel** | In-Play Trader | Real-time trading, latency | Mid-game alerts, manual provider switching |
 
+
+### Product Configuration System
+
+**Backend as Source of Truth:**
+- **Centralized Config**: `backend/config/product_config.py` contains all product details
+- **API Endpoint**: `GET /product/config` serves configuration to frontend
+- **Environment Support**: Override via environment variables for multi-tenant setups
+- **Single Maintenance Point**: Edit once, affects both backend AI and frontend UI
+
+**What's Configured:**
+- Product name, tagline, industry
+- Target users and key features
+- Pain points and value proposition
+- Mock generation context (for SVG diagrams)
+- User types (for system prompts)
+
+**Example:**
+```python
+PRODUCT_NAME = "BOOST by LSports"
+PRODUCT_DESCRIPTION = "Centralized performance analytics platform..."
+TARGET_USERS = ["Traders", "Product Managers", "Analysts"]
+KEY_FEATURES = ["Benchmark Comparison", "Trading Performance", ...]
+```
+
+**Customization:** Edit `backend/config/product_config.py` or set environment variables
+
+---
 
 ### Product Documentation Service
 

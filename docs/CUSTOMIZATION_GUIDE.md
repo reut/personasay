@@ -8,43 +8,54 @@ PersonaSay is an **open-source, customizable AI persona chat framework**. While 
 
 ### **1. Define Your Product Context**
 
-Edit: `frontend/src/config/product.config.ts`
+**Primary Location (Recommended):** `backend/config/product_config.py`
 
-```typescript
-export const productContext: ProductContext = {
-  name: "Your Product Name",
-  tagline: "Your compelling tagline",
-  description: "What does your product do? Who is it for?",
-  industry: "Your industry (e.g., Healthcare, FinTech, E-commerce)",
-  
-  target_users: [
+This is the **single source of truth** for product information. The backend owns product configuration and serves it to the frontend via API.
+
+```python
+# Basic Identity
+PRODUCT_NAME = "Your Product Name"
+PRODUCT_SHORT_NAME = "YourProduct"
+PRODUCT_TAGLINE = "Your compelling tagline"
+PRODUCT_INDUSTRY = "Your Industry"
+
+# Full Product Context
+PRODUCT_DESCRIPTION = """
+What does your product do? 
+Who is it for?
+What problems does it solve?
+"""
+
+TARGET_USERS = [
     "User Type 1 (e.g., Data Analysts)",
     "User Type 2 (e.g., Product Managers)",
-    // Add 3-6 user types
-  ],
-  
-  key_features: [
-    "Feature 1",
-    "Feature 2",
-    // List 5-10 key features
-  ],
-  
-  pain_points: [
+    # Add 3-6 user types
+]
+
+KEY_FEATURES = [
+    "Feature 1: Description",
+    "Feature 2: Description",
+    # List 5-10 key features
+]
+
+PAIN_POINTS = [
     "Problem your product solves",
     "Another pain point",
-    // List 5-10 pain points
-  ],
-  
-  value_proposition: "Your clear value proposition in 1-2 sentences",
-  
-  technical_context: "Brief technical overview for AI context"
-};
+    # List 5-10 pain points
+]
+
+VALUE_PROPOSITION = "Your clear value proposition in 1-2 sentences"
+
+TECHNICAL_CONTEXT = "Brief technical overview for AI context"
 ```
+
+**Alternative:** You can also edit `frontend/src/config/product.config.ts` for frontend-only customization, but backend is the recommended source of truth.
 
 **Tips:**
 - Be **specific** about your industry and users
 - Use **concrete examples** rather than generic terms
 - Include **technical details** that help AI understand your domain
+- Backend config is accessible via `GET /product/config` API endpoint
 
 ---
 
@@ -116,27 +127,27 @@ Each persona represents a **target user** of your product. Use the **empathy map
 
 ### **3. Configure Mock Generation Context**
 
-Edit: `frontend/src/config/product.config.ts` (bottom section)
+**Primary Location (Recommended):** `backend/config/product_config.py`
 
 This helps AI generate **relevant visual mocks** (SVG diagrams) for your domain:
 
-```typescript
-export const mockGenerationContext = {
-  domain: "Your industry domain keywords",
-  
-  requirements: [
-    "Content MUST be relevant to: [your keywords]",
-    "Include: [specific metrics, data types, entities]",
-    "Make it [visual style description]",
-    "NO placeholder text—show realistic [your data]"
-  ],
-  
-  example_sports: ["Entity Type 1", "Entity Type 2"],  // e.g., "SaaS Companies", "Healthcare Providers"
-  example_leagues: ["Example 1", "Example 2"],        // e.g., "Fortune 500", "SMBs"
-  example_providers: ["Tool A", "Tool B"],            // e.g., "Salesforce", "HubSpot"
-  example_metrics: ["Metric 1", "Metric 2"]          // e.g., "Conversion Rate", "Churn %"
-};
+```python
+MOCK_GENERATION_CONTEXT = {
+    "domain": "Your industry domain keywords",
+    "requirements": [
+        "Content MUST be relevant to: [your keywords]",
+        "Include: [specific metrics, data types, entities]",
+        "Make it [visual style description]",
+        "NO placeholder text—show realistic [your data]"
+    ],
+    "example_sports": ["Entity Type 1", "Entity Type 2"],      # e.g., "SaaS Companies", "Healthcare Providers"
+    "example_leagues": ["Example 1", "Example 2"],             # e.g., "Fortune 500", "SMBs"
+    "example_providers": ["Tool A", "Tool B"],                 # e.g., "Salesforce", "HubSpot"
+    "example_metrics": ["Metric 1", "Metric 2"]                # e.g., "Conversion Rate", "Churn %"
+}
 ```
+
+**Alternative:** You can also configure this in `frontend/src/config/product.config.ts`, but backend is the recommended source of truth.
 
 ---
 
