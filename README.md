@@ -314,20 +314,29 @@ Each of the 7 personas has:
 | **John** | Customer Support Lead | Incident response, reliability | Reactive support, unclear status |
 | **Rachel** | In-Play Trader | Real-time trading, latency | Mid-game alerts, manual provider switching |
 
-### LSports Content Service
+
+### Product Documentation Service
 
 **Hybrid Content Architecture:**
-- **Static Content** (14 features): Hardcoded BOOST platform knowledge
-- **Dynamic Content** (20+ items): Live-scraped from LSports documentation
-- **Refresh Mechanism**: Automatic content updates on first request per session
+- **Static Content**: Hardcoded fallback features for reliable baseline knowledge
+- **Dynamic Content**: Live-scraped from your product documentation
+- **Automatic Discovery**: Recursive crawling finds all related documentation pages
+- **Refresh Mechanism**: Configurable automatic content updates (default: every 6 hours)
 - **Fallback Strategy**: Graceful degradation to static content if scraping fails
 
-**Content Sources:**
-- BOOST platform features and capabilities
-- Coverage Hub analytics and provider rankings
-- Settlement Coverage reports
-- Livescore Coverage incident data
-- LSports data feeds and offerings
+**How It Works:**
+1. Configure with your documentation URL
+2. Service automatically discovers and scrapes all subpages
+3. Extracted features are cached and formatted for AI context
+4. Personas receive comprehensive, up-to-date product knowledge
+
+**Default Example** (LSports BOOST):
+- Static baseline: 8 core features
+- Dynamic scraped: 20+ features from docs.lsports.eu
+- Automatic crawl depth: 2 levels
+- Updates every 6 hours
+
+**Customization:** See `backend/services/README.md` for configuration guide
 
 ---
 
@@ -565,32 +574,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Email**: your-email@example.com
 
 ---
-
-## Roadmap
-
-### Current (v1.0)
-- [x] 7 specialized personas with unique empathy maps
-- [x] @Mention system for targeted responses
-- [x] File attachment support (images + documents)
-- [x] Visual mock generation (SVG)
-- [x] AI-powered summary with Word export
-- [x] Hybrid LSports content service
-
-### In Progress (v1.1)
-- [ ] Persistent conversation history
-- [ ] LangChain integration for advanced memory
-- [ ] Docker deployment configuration
-- [ ] Unit tests and CI/CD pipeline
-
-### Future (v2.0+)
-- [ ] Custom persona creation
-- [ ] Voice interaction capabilities
-- [ ] Real-time collaboration (multi-user sessions)
-- [ ] Advanced analytics dashboard
-- [ ] Mobile application
-
----
-
-**Built with love for product teams who want diverse perspectives**
 
 *PersonaSay simulates expert feedback, but remember: real user research is irreplaceable!*
