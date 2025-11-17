@@ -4,3 +4,6 @@ dist/
 .env
 *.log
 .vite/
+
+# User-specific configuration
+src/config/personas.config.ts

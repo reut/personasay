@@ -38,16 +38,18 @@ env/
 config.env
 *.env
 
+# Product Configuration (user-specific customization)
+config/product_config.py
+
 # Database
 *.db
 *.sqlite
 *.sqlite3
 data/personasay.db
 
-# Logs - ignore entire directory and all log files
+# Logs
 *.log
-logs/
-*.jsonl
+logs/*.log
 the_fixer.log
 
 # OS
