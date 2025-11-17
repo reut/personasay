@@ -49,7 +49,7 @@ class ChatRequest(BaseModel):
 
     prompt: str = Field(..., description="User message to send to personas")
     personas: List[Dict[str, Any]] = Field(..., description="List of active personas")
-    context: Dict[str, Any] = Field(..., description="Product context for the conversation")
+    context: Optional[Dict[str, Any]] = Field(None, description="Product context for the conversation (optional, backend will use its own config if not provided)")
     session_id: Optional[str] = Field(None, description="Conversation session ID")
     history: Optional[List[Dict[str, Any]]] = Field([], description="Previous conversation history")
     generate_mock: Optional[bool] = Field(
@@ -61,7 +61,7 @@ class ChatRequest(BaseModel):
 class SummaryRequest(BaseModel):
     """Summary generation request with KPI generation"""
 
-    context: Dict[str, Any] = Field(..., description="Product context")
+    context: Optional[Dict[str, Any]] = Field(None, description="Product context (optional, backend will use its own config if not provided)")
     history: List[Dict[str, Any]] = Field(..., description="Conversation history to summarize")
     session_id: Optional[str] = Field(None, description="Session ID for context")
     personas: Optional[List[Dict[str, Any]]] = Field(

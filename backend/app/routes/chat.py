@@ -8,7 +8,7 @@ import re
 import uuid
 from typing import Any, Dict, List, Optional
 
-from fastapi import APIRouter, File, Form, HTTPException, UploadFile
+from fastapi import APIRouter, File, Form, HTTPException, Request, UploadFile
 from langchain_openai import ChatOpenAI
 
 from app.dependencies import get_or_none_langchain_manager, set_langchain_manager
@@ -17,6 +17,7 @@ from app.logging_config import get_logger
 from app.models import ChatRequest
 from app.svg_generator import generate_svg_dashboard
 from app.svg_templates import get_dashboard_template_for_role
+from config.product_config import get_product_context
 
 router = APIRouter(tags=["chat"])
 logger = get_logger(__name__)
@@ -146,11 +147,14 @@ async def langchain_chat(request: ChatRequest):
         # Generate session ID if not provided
         session_id = request.session_id or str(uuid.uuid4())
 
+        # Use backend's product config if not provided in request
+        product_context = request.context if request.context else get_product_context()
+
         # Get responses from all active personas using LangChain
         responses = await langchain_manager.get_all_responses(
             active_persona_ids=persona_ids,
             user_message=request.prompt,
-            product_context=request.context,
+            product_context=product_context,
             session_id=session_id,
         )
 
@@ -364,7 +368,6 @@ Return ONLY valid JSON, no markdown, no explanations."""
 async def langchain_chat_with_attachments(
     prompt: str = Form(...),
     personas: str = Form(...),
-    context: str = Form(...),
     history: Optional[str] = Form(None),
     files: List[UploadFile] = File(default=[]),
     generate_mock: Optional[bool] = Form(False),
@@ -390,9 +393,9 @@ async def langchain_chat_with_attachments(
         parsed_personas: List[Dict[str, Any]] = (
             json.loads(personas) if isinstance(personas, str) else personas
         )
-        parsed_context: Dict[str, Any] = (
-            json.loads(context) if isinstance(context, str) else context
-        )
+        # Always use backend's product config (never from client)
+        parsed_context = get_product_context()
+        
         parsed_history: List[Dict[str, Any]] = []
         if history:
             try:

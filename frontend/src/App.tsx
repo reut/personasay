@@ -5,25 +5,8 @@ import { SummaryPanel } from './components/SummaryPanel';
 import DebatePanel from './components/DebatePanel';
 import { config } from './config';
 import { logger } from './utils/logger';
-// Import product and persona configurations
-import { productContext as configuredProductContext } from './config/product.config';
+// Import persona configurations
 import { personasData as configuredPersonasData } from './config/personas.config';
-
-// Product context data - now imported from config
-// This structure is kept for backward compatibility with the backend API
-const productContext = {
-  product_id: configuredProductContext.name.replace(/\s+/g, '_').toUpperCase(),
-  product_name: configuredProductContext.name,
-  description: configuredProductContext.description,
-  purpose: [
-    `Provide ${configuredProductContext.target_users[0]} with ${configuredProductContext.key_features[0]}`,
-    configuredProductContext.value_proposition
-  ],
-  current_capabilities: configuredProductContext.key_features,
-  target_users: configuredProductContext.target_users,
-  industry: configuredProductContext.industry,
-  technical_context: configuredProductContext.technical_context
-};
 
 // Personas data - now imported from config and transformed
 // This transformation maps the config structure to the App's expected format
@@ -174,7 +157,6 @@ function App() {
               <ChatWindow 
                 allPersonas={personas}
                 selectedPersonaIds={selectedPersonas}
-                context={productContext}
                 chatHistory={chatHistory}
                 setChatHistory={setChatHistory}
                 summary={summary}
@@ -183,7 +165,6 @@ function App() {
               />
               
               <SummaryPanel
-                context={productContext}
                 chatHistory={chatHistory}
                 setSummary={setSummary}
                 summary={summary}

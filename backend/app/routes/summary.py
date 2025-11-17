@@ -10,6 +10,7 @@ from langchain_openai import ChatOpenAI
 from app.logging_config import get_logger
 from app.models import SummaryRequest
 from app.svg_generator import ensure_kpis_in_summary, extract_kpis_as_structured_data
+from config.product_config import get_product_context
 
 router = APIRouter(tags=["summary"])
 logger = get_logger(__name__)
@@ -75,9 +76,12 @@ async def generate_langchain_summary(request: SummaryRequest):
         else:
             personas_list = "Various personas"
 
+        # Use backend's product config if not provided in request
+        product_context = request.context if request.context else get_product_context()
+
         summary_prompt = f"""Analyze this COMPLETE product conversation and provide a comprehensive business summary.
 
-Product Context: {json.dumps(request.context, indent=2)}
+Product Context: {json.dumps(product_context, indent=2)}
 
 CONVERSATION STRUCTURE:
 - Total Messages: {len(request.history)}

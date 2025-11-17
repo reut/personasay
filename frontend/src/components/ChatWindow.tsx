@@ -20,7 +20,6 @@ interface Message {
 interface ChatWindowProps {
   allPersonas: Persona[];
   selectedPersonaIds: string[];
-  context: any;
   chatHistory: Message[];
   setChatHistory: React.Dispatch<React.SetStateAction<Message[]>>;
   summary?: any;
@@ -44,7 +43,7 @@ const renderMarkdown = (text: string) => {
     .replace(/\n/g, '<br>');
 };
 
-export const ChatWindow = ({ allPersonas, selectedPersonaIds, context, chatHistory, setChatHistory, summary, setSummary, onLoadingChange }: ChatWindowProps) => {
+export const ChatWindow = ({ allPersonas, selectedPersonaIds, chatHistory, setChatHistory, summary, setSummary, onLoadingChange }: ChatWindowProps) => {
   // Clear chat function that also clears summary from parent if needed
   const clearChat = () => {
     if (window.confirm('Clear all chat history and summary? This cannot be undone.')) {
@@ -183,7 +182,6 @@ export const ChatWindow = ({ allPersonas, selectedPersonaIds, context, chatHisto
         const form = new FormData();
         form.append('prompt', inputMessage);
         form.append('personas', JSON.stringify(targetPersonas));
-        form.append('context', JSON.stringify(context));
         form.append('history', JSON.stringify(chatHistory.map(msg => ({
           role: msg.isUser ? 'user' : 'assistant',
           content: msg.content,
@@ -199,7 +197,6 @@ export const ChatWindow = ({ allPersonas, selectedPersonaIds, context, chatHisto
           body: JSON.stringify({
             prompt: inputMessage,
             personas: targetPersonas,
-            context: context,
             generate_mock: requestMock,
             history: chatHistory.map(msg => ({
               role: msg.isUser ? 'user' : 'assistant',

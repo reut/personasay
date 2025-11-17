@@ -40,6 +40,9 @@ from bs4 import BeautifulSoup
 from urllib.parse import urljoin, urlparse
 import logging
 
+# Import product configuration
+from config.product_config import MAIN_DOCS_URL, PRODUCT_NAME, PRODUCT_INDUSTRY
+
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -79,7 +82,7 @@ class ProductDocsConfig:
     def __init__(
         self,
         # Main documentation URL (REQUIRED - replace with your docs URL)
-        main_docs_url: str = "https://docs.lsports.eu/lsports/boost",
+        main_docs_url: str = MAIN_DOCS_URL,
         
         # Additional documentation sources (optional)
         additional_docs_urls: List[str] = None,
@@ -92,8 +95,8 @@ class ProductDocsConfig:
         description_tag: str = "p",
         
         # Product-specific metadata
-        product_name: str = "BOOST by LSports",
-        product_industry: str = "Sports Betting Analytics",
+        product_name: str = PRODUCT_NAME,
+        product_industry: str = PRODUCT_INDUSTRY,
         
         # User agent for HTTP requests
         user_agent: str = None,
@@ -120,7 +123,7 @@ class ProductDocsConfig:
             # RECURSIVE CRAWLING (NEW FEATURE!)
             follow_links: Whether to automatically follow internal links (default: True)
             max_depth: Maximum depth to crawl (0 = only start URL, 1 = one level deep, etc.)
-            link_pattern: Regex pattern for links to follow (e.g., r'/lsports/boost/.*')
+            link_pattern: Regex pattern for links to follow (e.g., r'/product/docs/.*')
                          If None, follows all links within the same domain and path prefix
             max_pages: Maximum number of pages to crawl (safety limit to prevent infinite loops)
         """
@@ -195,15 +198,15 @@ class ProductDocsService:
         EXAMPLE (replace with your URLs and product info):
         """
         return ProductDocsConfig(
-            main_docs_url="https://docs.lsports.eu/lsports/boost",
+            main_docs_url=MAIN_DOCS_URL,
             additional_docs_urls=[],
             cache_duration_hours=6,
-            product_name="BOOST by LSports",
-            product_industry="Sports Betting Analytics",
+            product_name=PRODUCT_NAME,
+            product_industry=PRODUCT_INDUSTRY,
             # Recursive crawling (NEW!)
             follow_links=True,
             max_depth=2,
-            link_pattern=r'/lsports/.*',
+            link_pattern=None,  # Will follow links within same domain
             max_pages=50
         )
     
@@ -420,7 +423,7 @@ class ProductDocsService:
                 return False
         else:
             # Default: must be within the same path prefix
-            # e.g., if start is /lsports/boost, only follow /lsports/boost/*
+            # e.g., if start is /product/docs, only follow /product/docs/*
             start_path_parts = parsed_start.path.rstrip('/').split('/')
             url_path_parts = parsed_url.path.rstrip('/').split('/')
             
@@ -959,15 +962,15 @@ def create_default_service() -> ProductDocsService:
         return ProductDocsService(config)
     """
     config = ProductDocsConfig(
-        main_docs_url="https://docs.lsports.eu/lsports/boost",
+        main_docs_url=MAIN_DOCS_URL,
         additional_docs_urls=[],  # No longer needed with recursive crawling!
         cache_duration_hours=6,
-        product_name="BOOST by LSports",
-        product_industry="Sports Betting Analytics",
+        product_name=PRODUCT_NAME,
+        product_industry=PRODUCT_INDUSTRY,
         # Recursive crawling configuration
         follow_links=True,
         max_depth=2,
-        link_pattern=r'/lsports/.*',  # Stay within LSports docs
+        link_pattern=None,  # Will follow links within same domain
         max_pages=50
     )
     return ProductDocsService(config)

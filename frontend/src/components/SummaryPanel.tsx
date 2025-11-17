@@ -4,7 +4,6 @@ import { config } from '../config';
 import { logger } from '../utils/logger';
 
 interface SummaryPanelProps {
-  context: any;
   chatHistory: any[];
   setSummary: (summary: any) => void;
   summary: any;
@@ -81,7 +80,7 @@ const processMarkdown = (text: string) => {
     .replace(/\n/g, '<br>');
 };
 
-export const SummaryPanel = ({ context, chatHistory, setSummary, summary, allPersonas, selectedPersonaIds }: SummaryPanelProps) => {
+export const SummaryPanel = ({ chatHistory, setSummary, summary, allPersonas, selectedPersonaIds }: SummaryPanelProps) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const generateSummary = async () => {
@@ -99,7 +98,6 @@ export const SummaryPanel = ({ context, chatHistory, setSummary, summary, allPer
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          context: context,
           history: chatHistory.map(msg => ({
             role: msg.isUser ? 'user' : 'assistant',
             content: msg.content,
