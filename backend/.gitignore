@@ -41,6 +41,13 @@ config.env
 # Product Configuration (user-specific customization)
 config/product_config.py
 
+# Persona Configurations (user-specific customization)
+# Individual persona files are private - only the template is tracked
+app/personas/*_enhanced.json
+app/personas/*_*.json
+# But keep the template
+!app/personas/persona_template.json
+
 # Database
 *.db
 *.sqlite

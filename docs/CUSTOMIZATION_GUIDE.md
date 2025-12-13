@@ -12,6 +12,15 @@ PersonaSay is an **open-source, customizable AI persona chat framework**. While 
 
 This is the **single source of truth** for product information. The backend owns product configuration and serves it to the frontend via API.
 
+**Setup:**
+```bash
+# Copy the template
+cp backend/config/product_config.py.example backend/config/product_config.py
+
+# Edit with your product details
+nano backend/config/product_config.py
+```
+
 ```python
 # Basic Identity
 PRODUCT_NAME = "Your Product Name"

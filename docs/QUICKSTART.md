@@ -177,9 +177,55 @@ Only Alex will respond, regardless of selection.
 
 ## Configuration Options
 
+### Essential Configuration Files
+
+PersonaSay requires two configuration files that are **gitignored** (not in version control):
+
+#### 1. Environment Variables (`backend/.env`)
+
+Contains API keys and secrets:
+
+```bash
+# Copy template
+cp backend/config/config.env.example backend/.env
+
+# Edit and add your OpenAI key
+nano backend/.env
+```
+
+Required settings:
+```bash
+OPENAI_API_KEY=sk-your-key-here
+PORT=8001
+HOST=127.0.0.1
+DEBUG=true
+```
+
+#### 2. Product Configuration (`backend/config/product_config.py`)
+
+Defines your product context for AI personas:
+
+```bash
+# Copy template
+cp backend/config/product_config.py.example backend/config/product_config.py
+
+# Customize with your product details
+nano backend/config/product_config.py
+```
+
+**What to customize:**
+- Product name, tagline, industry
+- Target users and key features
+- Pain points and value proposition
+- Mock generation context
+
+See [CUSTOMIZATION_GUIDE.md](CUSTOMIZATION_GUIDE.md) for detailed instructions.
+
+---
+
 ### Local Development
 
-Edit `backend/config.env`:
+Edit `backend/.env`:
 ```bash
 OPENAI_API_KEY=sk-your-key-here
 PORT=8001

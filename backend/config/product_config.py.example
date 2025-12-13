@@ -1,0 +1,320 @@
+"""
+Product Configuration Template
+==============================
+This is the SINGLE SOURCE OF TRUTH for product information in PersonaSay.
+
+SETUP INSTRUCTIONS:
+1. Copy this file: cp product_config.py.example product_config.py
+2. Edit product_config.py with your actual product details
+3. product_config.py is gitignored - your customizations stay private
+
+The frontend fetches this configuration via the API endpoint: GET /product/config
+AI personas use this context to provide domain-specific feedback.
+"""
+
+import os
+from typing import List, Dict, Any
+
+
+# ============================================================================
+# BASIC IDENTITY (Required - Used in system prompts and UI)
+# ============================================================================
+
+PRODUCT_NAME = os.getenv("PRODUCT_NAME", "Your Product Name")
+PRODUCT_SHORT_NAME = os.getenv("PRODUCT_SHORT_NAME", "YourProduct")
+PRODUCT_TAGLINE = os.getenv("PRODUCT_TAGLINE", "Your compelling product tagline")
+PRODUCT_INDUSTRY = os.getenv("PRODUCT_INDUSTRY", "Your Industry (e.g., SaaS, Healthcare, FinTech)")
+
+# Target User/Customer Type (for AI system prompts)
+USER_TYPE = os.getenv("USER_TYPE", "your customer type (e.g., data analyst, product manager)")
+USER_TYPE_PLURAL = os.getenv("USER_TYPE_PLURAL", "your customers (plural form)")
+COMPANY_INDUSTRY = os.getenv("COMPANY_INDUSTRY", "your industry (e.g., fintech industry, healthcare sector)")
+
+# Documentation URL (used by product_docs_service for dynamic content scraping)
+MAIN_DOCS_URL = os.getenv("MAIN_DOCS_URL", "https://docs.yourproduct.com/features")
+
+
+# ============================================================================
+# FULL PRODUCT CONTEXT (Source of truth for AI and UI)
+# ============================================================================
+
+PRODUCT_DESCRIPTION = """[Replace with your product description]
+
+Describe what your product does, who it's for, and what problems it solves.
+Be specific and detailed - this helps AI personas understand your domain.
+
+Example structure:
+- What: [Product name] is a [product type] designed to help [target users] achieve [goals].
+- Who: It's built for [specific user types] in [industry/domain].
+- Why: It solves [key problems] by providing [key capabilities].
+
+2-3 paragraphs recommended.
+"""
+
+TARGET_USERS = [
+    "User Type 1 (e.g., Data Analysts & BI Professionals)",
+    "User Type 2 (e.g., Product Managers)",
+    "User Type 3 (e.g., Engineering Teams)",
+    "User Type 4 (e.g., Business Stakeholders)",
+    # Add 3-6 target user types
+    # These appear in the UI and help personas understand who uses your product
+]
+
+KEY_FEATURES = [
+    "Feature 1: Brief description of what it does and why it matters",
+    "Feature 2: Another key capability with context",
+    "Feature 3: Include specific metrics or outcomes where relevant",
+    "Feature 4: Be concrete - avoid generic terms",
+    # Add 5-12 key features
+    # Format: "Feature Name: Description with specific details"
+    # These help AI understand your product capabilities
+]
+
+PAIN_POINTS = [
+    "Pain point 1: What problem does your product solve?",
+    "Pain point 2: What frustrates users in your domain?",
+    "Pain point 3: What manual processes do you eliminate?",
+    "Pain point 4: What visibility gaps do you address?",
+    # Add 5-10 pain points
+    # Be specific about actual user frustrations in your industry
+]
+
+VALUE_PROPOSITION = "[Replace with your value proposition - 1-2 sentences]"
+
+TECHNICAL_CONTEXT = """[Replace with technical overview]
+
+Brief technical description for AI context. Include:
+- Architecture overview (what systems/data you integrate with)
+- Key technical capabilities
+- Integration points
+- Data flow or processing approach
+
+1-2 paragraphs recommended.
+"""
+
+# ============================================================================
+# MOCK GENERATION CONTEXT (For visual SVG mock generation)
+# ============================================================================
+
+MOCK_GENERATION_CONTEXT = {
+    "domain": "Your industry domain, key concepts, and terminology (e.g., 'SaaS analytics, dashboards, metrics, KPIs')",
+    "requirements": [
+        "Content MUST be relevant to: [your key topics, concepts, entities]",
+        "Include: [specific metrics, data types, entities relevant to your domain]",
+        "Make it visually rich, professional, mature, and unique to [your industry]",
+        "NO placeholder text—show realistic [your domain-specific data]"
+    ],
+    "example_sports": [
+        # Replace "example_sports" key name if needed (e.g., "example_companies", "example_patients")
+        "Entity Type 1 relevant to your domain",
+        "Entity Type 2",
+        "Entity Type 3",
+        # Add 5-10 examples
+    ],
+    "example_leagues": [
+        # Replace "example_leagues" key name if needed (e.g., "example_segments", "example_departments")
+        "Category/Group 1 in your domain",
+        "Category/Group 2",
+        # Add 5-10 examples
+    ],
+    "example_providers": [
+        # Replace "example_providers" key name if needed (e.g., "example_tools", "example_vendors")
+        "Tool/Service A in your industry",
+        "Tool/Service B",
+        "Tool/Service C",
+        # Add 5-10 examples of tools/services in your domain
+    ],
+    "example_metrics": [
+        "Metric 1 relevant to your domain (e.g., Conversion Rate, Uptime %)",
+        "Metric 2",
+        "Metric 3",
+        # Add 5-10 key metrics in your industry
+    ]
+}
+
+
+# ============================================================================
+# HELPER FUNCTIONS (DO NOT MODIFY - Used internally)
+# ============================================================================
+
+def get_product_context() -> Dict[str, Any]:
+    """
+    Get complete product configuration as a dictionary.
+    
+    This is used by:
+    - API endpoint to serve product config to frontend
+    - AI system to enrich persona prompts with product knowledge
+    - Summary generation and reporting
+    
+    Returns:
+        dict: Complete product configuration
+    """
+    return {
+        # Basic identity
+        "name": PRODUCT_NAME,
+        "product_name": PRODUCT_NAME,
+        "product_id": PRODUCT_NAME.replace(' ', '_').upper(),
+        "short_name": PRODUCT_SHORT_NAME,
+        "tagline": PRODUCT_TAGLINE,
+        "industry": PRODUCT_INDUSTRY,
+        
+        # Full context
+        "description": PRODUCT_DESCRIPTION,
+        "target_users": TARGET_USERS,
+        "key_features": KEY_FEATURES,
+        "current_capabilities": KEY_FEATURES,
+        "pain_points": PAIN_POINTS,
+        "value_proposition": VALUE_PROPOSITION,
+        "purpose": [
+            f"Provide {TARGET_USERS[0] if TARGET_USERS else 'users'} with {KEY_FEATURES[0] if KEY_FEATURES else 'key features'}",
+            VALUE_PROPOSITION
+        ],
+        "technical_context": TECHNICAL_CONTEXT,
+        
+        # Mock generation
+        "mock_generation_context": MOCK_GENERATION_CONTEXT,
+        
+        # For system prompts
+        "user_type": USER_TYPE,
+        "user_type_plural": USER_TYPE_PLURAL,
+        "company_industry": COMPANY_INDUSTRY,
+        
+        # Documentation URL
+        "main_docs_url": MAIN_DOCS_URL,
+    }
+
+
+def get_system_prompt_context() -> Dict[str, str]:
+    """
+    Get minimal context for system prompts.
+    
+    Returns:
+        dict: Minimal context for prompts
+    """
+    return {
+        "product_name": PRODUCT_NAME,
+        "product_short_name": PRODUCT_SHORT_NAME,
+        "product_industry": PRODUCT_INDUSTRY,
+        "user_type": USER_TYPE,
+        "user_type_plural": USER_TYPE_PLURAL,
+        "company_industry": COMPANY_INDUSTRY,
+    }
+
+
+# ============================================================================
+# CUSTOMIZATION OPTIONS
+# ============================================================================
+
+"""
+Option 1: Edit this file directly (Recommended)
+------------------------------------------------
+1. Copy product_config.py.example to product_config.py
+2. Edit the values above with your product details
+3. Restart backend: python main.py
+
+Option 2: Set environment variables
+------------------------------------
+All values can be overridden via environment variables:
+
+export PRODUCT_NAME="MyProduct Platform"
+export PRODUCT_SHORT_NAME="MyProduct"
+export PRODUCT_TAGLINE="Your Product Tagline"
+export PRODUCT_INDUSTRY="Your Industry"
+export USER_TYPE="your customer type"
+export USER_TYPE_PLURAL="your customers"
+export COMPANY_INDUSTRY="your industry"
+export MAIN_DOCS_URL="https://docs.yourproduct.com"
+
+Then restart backend.
+
+Option 3: Programmatic configuration (Advanced)
+------------------------------------------------
+For multi-tenant or dynamic configurations:
+
+from config import product_config
+
+# Modify at runtime
+product_config.PRODUCT_NAME = "Dynamic Product Name"
+product_config.TARGET_USERS = ["Dynamic User 1", "Dynamic User 2"]
+
+# Get updated context
+context = product_config.get_product_context()
+"""
+
+# ============================================================================
+# EXAMPLES & TIPS
+# ============================================================================
+
+"""
+EXAMPLE 1: SaaS Analytics Platform
+-----------------------------------
+
+PRODUCT_NAME = "MetricFlow Analytics"
+PRODUCT_SHORT_NAME = "MetricFlow"
+PRODUCT_TAGLINE = "Unified SaaS Metrics Across All Your Tools"
+PRODUCT_INDUSTRY = "SaaS Analytics & Business Intelligence"
+
+USER_TYPE = "product manager"
+USER_TYPE_PLURAL = "product managers and growth teams"
+COMPANY_INDUSTRY = "SaaS and tech industry"
+
+TARGET_USERS = [
+    "Product Managers & Product Owners",
+    "Growth Marketing Teams",
+    "Data Analysts & BI Professionals",
+    "Engineering Leaders"
+]
+
+KEY_FEATURES = [
+    "Cross-platform data aggregation from Mixpanel, Amplitude, GA4, and more",
+    "Custom dashboard builder with drag-and-drop widgets",
+    "Predictive analytics for churn and conversion forecasting",
+    "Automated anomaly detection and alerting"
+]
+
+
+EXAMPLE 2: Healthcare Platform
+-------------------------------
+
+PRODUCT_NAME = "CareSync Patient Management"
+PRODUCT_SHORT_NAME = "CareSync"
+PRODUCT_TAGLINE = "Coordinate Patient Care Across Providers"
+PRODUCT_INDUSTRY = "Healthcare IT & Patient Management"
+
+USER_TYPE = "healthcare provider"
+USER_TYPE_PLURAL = "physicians, nurses, and care coordinators"
+COMPANY_INDUSTRY = "healthcare industry"
+
+TARGET_USERS = [
+    "Primary Care Physicians",
+    "Registered Nurses & Care Coordinators",
+    "Practice Managers & Administrators",
+    "Medical Specialists"
+]
+
+KEY_FEATURES = [
+    "Unified patient records across multiple EMR systems",
+    "Real-time care team collaboration and messaging",
+    "Automated appointment scheduling and reminders",
+    "HIPAA-compliant secure document sharing"
+]
+
+
+TIPS FOR GREAT CONFIGURATION:
+------------------------------
+
+DO:
+✓ Be specific: "SaaS product managers" not "managers"
+✓ Use metrics: "Track 50+ KPIs" not "many metrics"
+✓ Include real tools: "Integrates with Salesforce, HubSpot" not "CRM systems"
+✓ Show outcomes: "Reduce manual reporting by 80%" not "saves time"
+✓ Use industry terms: "Settlement latency" not "processing time"
+
+DON'T:
+✗ Be vague: "Various analytics" instead of specific features
+✗ Use placeholders: "Your Product Here" - use a real example
+✗ Skip details: AI needs context to provide relevant responses
+✗ Forget metrics: Numbers make personas more realistic
+✗ Generic terms: "Improve efficiency" vs "Reduce reporting time from 4 hours to 15 minutes"
+"""
+

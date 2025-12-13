@@ -476,7 +476,7 @@ Click "expand" icon to view full-screen
 
 ## Configuration
 
-### Environment Variables (`backend/config.env`)
+### Environment Variables (`backend/.env` or `backend/config.env`)
 
 ```bash
 # OpenAI Configuration
@@ -491,6 +491,79 @@ DEBUG=false
 DATABASE_URL=sqlite:///./personasay.db
 # DATABASE_URL=postgresql://user:password@localhost:5432/personasay
 ```
+
+**Setup:**
+```bash
+# Copy the template
+cp backend/config/config.env.example backend/.env
+
+# Edit and add your OPENAI_API_KEY
+nano backend/.env
+```
+
+See `backend/config/config.env.example` for all available options.
+
+### Product Configuration (`backend/config/product_config.py`)
+
+**Single source of truth for product information** - used by both AI personas and frontend UI.
+
+```bash
+# Create from template
+cp backend/config/product_config.py.example backend/config/product_config.py
+
+# Edit with your product details
+nano backend/config/product_config.py
+```
+
+**What to configure:**
+- Product name, tagline, industry
+- Target users (who uses your product)
+- Key features and capabilities
+- Pain points your product solves
+- Mock generation context (for SVG diagrams)
+
+**Example:**
+```python
+PRODUCT_NAME = "Your Product Name"
+PRODUCT_INDUSTRY = "Your Industry (e.g., SaaS, Healthcare)"
+TARGET_USERS = ["User Type 1", "User Type 2", ...]
+KEY_FEATURES = ["Feature 1: description", ...]
+```
+
+See `backend/config/product_config.py.example` for complete template with examples.
+
+**How it's used:**
+- **API endpoint**: `GET /product/config` serves config to frontend
+- **AI context**: Personas understand your domain and provide relevant feedback
+- **Mock generation**: SVG diagrams reflect your industry terminology
+
+### Persona Configurations (`backend/app/personas/`)
+
+**Individual AI persona definitions** - each persona is a detailed profile with empathy maps, career history, and behavioral patterns.
+
+```bash
+# Copy template to create new personas
+cp backend/app/personas/persona_template.json backend/app/personas/sarah_analyst.json
+
+# Edit with persona details
+nano backend/app/personas/sarah_analyst.json
+```
+
+**What to define:**
+- Basic info (name, role, company)
+- Empathy map (think/feel, hear, see, say/do, pain, gain)
+- Career history and defining experiences
+- Industry awareness and competitive landscape
+- Organizational context (stakeholders, budget, KPIs)
+- Communication patterns and terminology
+- Incentives and decision drivers
+
+**Default personas included:**
+The repo includes 7 example personas from sports betting industry. These are **examples only** - replace them with personas relevant to your product.
+
+See `backend/app/personas/persona_template.json` for complete structure with 300+ lines of guidance.
+
+**Note:** Actual persona files (`*_enhanced.json`) are gitignored - only the template is tracked.
 
 ### Frontend Configuration (`frontend/src/config.ts`)
 
