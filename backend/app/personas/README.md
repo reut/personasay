@@ -9,7 +9,7 @@ This directory contains AI persona definitions used by PersonaSay.
 
 ## Current Status
 
-⚠️ **Important**: The default persona files (`alex_enhanced.json`, `nina_enhanced.json`, etc.) are currently **tracked in git** but should be **gitignored** for security and privacy.
+**Important**: The default persona files (`alex_enhanced.json`, `nina_enhanced.json`, etc.) are currently **tracked in git** but should be **gitignored** for security and privacy.
 
 ### Why Remove Them from Git?
 
@@ -74,33 +74,33 @@ The template includes these main sections:
 
 #### 1. Be Specific with Numbers
 
-❌ Bad: "Manages a team"  
-✅ Good: "Manages 25 traders across 3 regions with $3.2M annual budget"
+Bad: "Manages a team"  
+Good: "Manages 25 traders across 3 regions with $3.2M annual budget"
 
 #### 2. Include Real Constraints
 
-❌ Bad: "Needs approval for big purchases"  
-✅ Good: "Can approve up to $25K solo; above that requires CFO sign-off"
+Bad: "Needs approval for big purchases"  
+Good: "Can approve up to $25K solo; above that requires CFO sign-off"
 
 #### 3. Use Domain Terminology
 
-❌ Bad: "Works with data providers"  
-✅ Good: "Evaluates odds feed providers like Betradar, LSports, BetGenius for coverage and latency"
+Bad: "Works with data providers"  
+Good: "Evaluates odds feed providers like Betradar, LSports, BetGenius for coverage and latency"
 
 #### 4. Show Career Experience
 
-❌ Bad: "Has experience in the industry"  
-✅ Good: "9 years in sports betting operations. Previously led provider consolidation that saved $400K annually"
+Bad: "Has experience in the industry"  
+Good: "9 years in sports betting operations. Previously led provider consolidation that saved $400K annually"
 
 #### 5. Define Clear Pain Points
 
-❌ Bad: "System outages are frustrating"  
-✅ Good: "Provider outages cost $50K-$100K per incident and hurt my 20% performance bonus"
+Bad: "System outages are frustrating"  
+Good: "Provider outages cost $50K-$100K per incident and hurt my 20% performance bonus"
 
 #### 6. Include Stakeholder Dynamics
 
-❌ Bad: "Reports to management"  
-✅ Good: "Reports to COO Sarah. CFO David constantly pressures to cut 20% from provider spend. Weekly 1:1s to justify costs."
+Bad: "Reports to management"  
+Good: "Reports to COO Sarah. CFO David constantly pressures to cut 20% from provider spend. Weekly 1:1s to justify costs."
 
 ## Example Personas Included
 

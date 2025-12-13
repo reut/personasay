@@ -135,11 +135,11 @@ nano backend/config/product_config.py  # or use your preferred editor
 
 | Section | Required | Description |
 |---------|----------|-------------|
-| **Basic Identity** | ✅ Yes | Product name, tagline, industry |
-| **Product Context** | ✅ Yes | Description, features, pain points, value prop |
-| **Target Users** | ✅ Yes | Who uses your product (3-6 types) |
-| **Technical Context** | ⚠️ Recommended | Brief technical overview |
-| **Mock Generation** | ⚠️ Recommended | Context for SVG mock generation |
+| **Basic Identity** | Yes | Product name, tagline, industry |
+| **Product Context** | Yes | Description, features, pain points, value prop |
+| **Target Users** | Yes | Who uses your product (3-6 types) |
+| **Technical Context** | Recommended | Brief technical overview |
+| **Mock Generation** | Recommended | Context for SVG mock generation |
 
 #### How It's Used
 
@@ -193,10 +193,10 @@ OPENAI_API_KEY=sk-proj-your-actual-key-here
 
 | Variable | Required | Description |
 |----------|----------|-------------|
-| `OPENAI_API_KEY` | ✅ Yes | Your OpenAI API key ([get one here](https://platform.openai.com/api-keys)) |
-| `DATABASE_URL` | ⚠️ Default provided | SQLite for dev, PostgreSQL for production |
-| `SECRET_KEY` | ⚠️ Default provided | Change in production! |
-| `CORS_ORIGINS` | ⚠️ Default provided | Allowed frontend origins |
+| `OPENAI_API_KEY` | Yes | Your OpenAI API key ([get one here](https://platform.openai.com/api-keys)) |
+| `DATABASE_URL` | Default provided | SQLite for dev, PostgreSQL for production |
+| `SECRET_KEY` | Default provided | Change in production! |
+| `CORS_ORIGINS` | Default provided | Allowed frontend origins |
 
 #### Production Checklist
 
