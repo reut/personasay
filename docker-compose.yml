@@ -15,6 +15,11 @@ services:
       - DATABASE_URL=${DATABASE_URL:-sqlite:///./data/personasay.db}
       - CORS_ORIGINS=${CORS_ORIGINS:-http://localhost:3000,http://localhost:5173,http://127.0.0.1:3000}
       - SECRET_KEY=${SECRET_KEY:-change-me-in-production}
+      # Langfuse Configuration (optional - for observability)
+      - LANGFUSE_ENABLED=${LANGFUSE_ENABLED:-false}
+      - LANGFUSE_PUBLIC_KEY=${LANGFUSE_PUBLIC_KEY:-}
+      - LANGFUSE_SECRET_KEY=${LANGFUSE_SECRET_KEY:-}
+      - LANGFUSE_HOST=${LANGFUSE_HOST:-http://langfuse:3000}
     volumes:
       - backend-data:/app/data
     restart: unless-stopped
@@ -47,9 +52,46 @@ services:
     networks:
       - personasay-network
 
+  # ============================================================================
+  # Langfuse Services (Optional - for self-hosted observability)
+  # ============================================================================
+  # Uncomment the services below to run Langfuse locally
+  # Then set LANGFUSE_ENABLED=true and configure API keys in backend environment
+  
+  # langfuse-db:
+  #   image: postgres:15
+  #   container_name: personasay-langfuse-db
+  #   environment:
+  #     POSTGRES_DB: langfuse
+  #     POSTGRES_USER: langfuse
+  #     POSTGRES_PASSWORD: ${LANGFUSE_DB_PASSWORD:-langfuse_change_me}
+  #   volumes:
+  #     - langfuse-db-data:/var/lib/postgresql/data
+  #   restart: unless-stopped
+  #   networks:
+  #     - personasay-network
+
+  # langfuse:
+  #   image: langfuse/langfuse:latest
+  #   container_name: personasay-langfuse
+  #   depends_on:
+  #     - langfuse-db
+  #   ports:
+  #     - "3000:3000"
+  #   environment:
+  #     DATABASE_URL: postgresql://langfuse:${LANGFUSE_DB_PASSWORD:-langfuse_change_me}@langfuse-db:5432/langfuse
+  #     NEXTAUTH_SECRET: ${LANGFUSE_NEXTAUTH_SECRET:-change_this_to_a_random_string_min_32_chars}
+  #     NEXTAUTH_URL: ${LANGFUSE_NEXTAUTH_URL:-http://localhost:3000}
+  #     SALT: ${LANGFUSE_SALT:-change_this_to_another_random_string}
+  #   restart: unless-stopped
+  #   networks:
+  #     - personasay-network
+
 volumes:
   backend-data:
     driver: local
+  # langfuse-db-data:
+  #   driver: local
 
 networks:
   personasay-network:

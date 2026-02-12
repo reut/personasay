@@ -15,6 +15,9 @@ interface Message {
   avatarColor?: string;
   avatar?: string;
   avatarUrl?: string;
+  trace_id?: string;
+  persona_id?: string;
+  feedback?: number; // 0 = thumbs down, 1 = thumbs up, undefined = no feedback yet
 }
 
 interface ChatWindowProps {
@@ -247,7 +250,9 @@ export const ChatWindow = ({ allPersonas, selectedPersonaIds, chatHistory, setCh
           isUser: false,
           avatarColor: matchedPersona?.avatarColor,
           avatar: matchedPersona?.avatar,
-          avatarUrl: matchedPersona?.avatarUrl
+          avatarUrl: matchedPersona?.avatarUrl,
+          trace_id: reply.trace_id,
+          persona_id: reply.persona_id
         };
         const extras: Message[] = [textMsg];
         if (reply.mock_svg && typeof reply.mock_svg === 'string' && reply.mock_svg.includes('<svg')) {
@@ -305,6 +310,41 @@ export const ChatWindow = ({ allPersonas, selectedPersonaIds, chatHistory, setCh
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       sendMessage();
+    }
+  };
+
+  const sendFeedback = async (messageId: string, score: number) => {
+    const message = chatHistory.find(m => m.id === messageId);
+    if (!message || !message.trace_id) {
+      logger.warn('Cannot send feedback: message has no trace_id');
+      return;
+    }
+
+    try {
+      const response = await fetch(`${config.api.baseUrl}/feedback`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          trace_id: message.trace_id,
+          score: score,
+          persona_id: message.persona_id,
+          persona_name: message.sender
+        }),
+      });
+
+      if (response.ok) {
+        // Update message feedback in state
+        setChatHistory(prev => prev.map(m => 
+          m.id === messageId ? { ...m, feedback: score } : m
+        ));
+        logger.info(`Feedback sent for ${message.sender}: ${score === 1 ? 'thumbs up' : 'thumbs down'}`);
+      } else {
+        logger.error('Failed to send feedback:', await response.text());
+      }
+    } catch (error) {
+      logger.error('Error sending feedback:', error);
     }
   };
 
@@ -539,6 +579,35 @@ export const ChatWindow = ({ allPersonas, selectedPersonaIds, chatHistory, setCh
                     __html: renderMarkdown(message.content) 
                   }}
                 />
+              )}
+              {!message.isUser && message.trace_id && !message.content.trim().startsWith('<svg') && (
+                <div className="flex items-center space-x-2 mt-3 pt-3 border-t border-cyan-900/30">
+                  <span className="text-xs text-gray-500">Helpful?</span>
+                  <button
+                    onClick={() => sendFeedback(message.id, 1)}
+                    className={`p-1 rounded transition-colors ${
+                      message.feedback === 1 
+                        ? 'bg-green-600/30 text-green-400' 
+                        : 'hover:bg-cyan-900/30 text-gray-400 hover:text-green-400'
+                    }`}
+                    title="Thumbs up"
+                    disabled={message.feedback !== undefined}
+                  >
+                    👍
+                  </button>
+                  <button
+                    onClick={() => sendFeedback(message.id, 0)}
+                    className={`p-1 rounded transition-colors ${
+                      message.feedback === 0 
+                        ? 'bg-red-600/30 text-red-400' 
+                        : 'hover:bg-cyan-900/30 text-gray-400 hover:text-red-400'
+                    }`}
+                    title="Thumbs down"
+                    disabled={message.feedback !== undefined}
+                  >
+                    👎
+                  </button>
+                </div>
               )}
             </div>
           </div>

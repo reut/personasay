@@ -136,6 +136,8 @@ Speak from YOUR company's perspective as someone who uses or evaluates these ser
             user_message=debate_prompt,
             product_context={"debate_topic": request.topic, "round": request.round_number},
             session_id=request.debate_id,
+            feature="debate",
+            trace_metadata={"round_number": request.round_number, "debate_topic": request.topic}
         )
 
         logger.info(f"Round {request.round_number} complete with {len(responses)} responses")
@@ -297,6 +299,8 @@ Speak from YOUR company's perspective as someone who uses or evaluates these ser
                 "has_attachments": len(files) > 0,
             },
             session_id=debate_id,
+            feature="debate",
+            trace_metadata={"round_number": round_number, "debate_topic": topic, "has_attachments": len(files) > 0}
         )
 
         logger.info(f"Round {round_number} complete with {len(responses)} responses")

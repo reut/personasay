@@ -69,6 +69,10 @@ app.include_router(summary_router)
 app.include_router(debate_router)
 app.include_router(memory_router)
 
+# Import and include feedback router
+from app.routes.feedback import router as feedback_router
+app.include_router(feedback_router)
+
 
 if __name__ == "__main__":
     import os

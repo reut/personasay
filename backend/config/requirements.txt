@@ -19,6 +19,9 @@ langchain-community>=0.3.0,<1.0
 langchain-core>=0.3.0,<1.0
 langsmith>=0.1.0
 
+# Observability & Monitoring
+langfuse>=2.0.0  # LangChain tracing, cost tracking, and evaluation
+
 # Database & Persistence
 sqlalchemy>=2.0.0
 psycopg2-binary>=2.9.0  # PostgreSQL for production

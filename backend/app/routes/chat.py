@@ -156,6 +156,8 @@ async def langchain_chat(request: ChatRequest):
             user_message=request.prompt,
             product_context=product_context,
             session_id=session_id,
+            feature="chat",
+            trace_metadata={"generate_mock": request.generate_mock}
         )
 
         logger.info(f"Generated {len(responses)} LangChain responses")

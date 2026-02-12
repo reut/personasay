@@ -80,6 +80,19 @@ fi
 mkdir -p data
 echo -e "${GREEN}✓${NC} Data directory ready"
 
+# Initialize database from starter template
+if [ -f "init_db.py" ] && [ -f "data/personasay_starter.db" ]; then
+    if [ ! -f "data/personasay.db" ]; then
+        echo "Initializing database from starter template..."
+        python init_db.py <<< "y"
+        echo -e "${GREEN}✓${NC} Database initialized"
+    else
+        echo -e "${GREEN}✓${NC} Database already exists"
+    fi
+else
+    echo -e "${YELLOW}⚠️  Starter database not found, will be created on first run${NC}"
+fi
+
 # Create logs directory
 mkdir -p logs
 echo -e "${GREEN}✓${NC} Logs directory ready"

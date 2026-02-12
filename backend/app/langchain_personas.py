@@ -21,6 +21,14 @@ from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.tools import Tool
 from langchain_openai import ChatOpenAI
 
+# Langfuse for observability
+try:
+    from langfuse.langchain import CallbackHandler
+    LANGFUSE_AVAILABLE = True
+except ImportError:
+    LANGFUSE_AVAILABLE = False
+    logger.warning("Langfuse not available. Install with: pip install langfuse")
+
 # Configuration
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -41,6 +49,12 @@ class Settings(BaseSettings):
     redis_url: str = "redis://localhost:6379"
     langsmith_api_key: str = ""
     langsmith_project: str = "PersonaSay"
+    
+    # Langfuse Configuration
+    langfuse_public_key: str = ""
+    langfuse_secret_key: str = ""
+    langfuse_host: str = "https://cloud.langfuse.com"
+    langfuse_enabled: bool = True
 
 
 # Database Models
@@ -100,6 +114,67 @@ class LangChainPersonaAgent:
         self._initialize_memory()
         self._initialize_tools()
         self._initialize_agent(context_mode="evaluation")  # Default to evaluation mode
+
+    def _create_langfuse_handler(
+        self, 
+        session_id: str = None, 
+        feature: str = "chat",
+        metadata: Dict[str, Any] = None
+    ):
+        """Create Langfuse callback handler with persona metadata
+        
+        Args:
+            session_id: Session ID for grouping traces
+            feature: Feature name (chat, debate, summary)
+            metadata: Additional metadata to attach to the trace
+            
+        Returns:
+            CallbackHandler instance or None if Langfuse is disabled/unavailable
+        """
+        if not LANGFUSE_AVAILABLE:
+            logger.debug(f"Langfuse not available for {self.name}")
+            return None
+            
+        if not self.settings.langfuse_enabled:
+            logger.debug(f"Langfuse disabled for {self.name}")
+            return None
+            
+        if not self.settings.langfuse_public_key or not self.settings.langfuse_secret_key:
+            logger.warning(f"Langfuse keys not configured for {self.name}. Tracing disabled.")
+            return None
+            
+        try:
+            import os
+            
+            # Set environment variables for Langfuse (required by LangChain callback)
+            os.environ["LANGFUSE_PUBLIC_KEY"] = self.settings.langfuse_public_key
+            os.environ["LANGFUSE_SECRET_KEY"] = self.settings.langfuse_secret_key
+            os.environ["LANGFUSE_HOST"] = self.settings.langfuse_host
+            
+            # Build metadata
+            trace_metadata = {
+                "persona_id": self.persona_id,
+                "persona_name": self.name,
+                "persona_role": self.role,
+                "persona_company": self.company,
+                "feature": feature,
+            }
+            
+            # Merge with additional metadata
+            if metadata:
+                trace_metadata.update(metadata)
+            
+            logger.info(f"Creating Langfuse handler for {self.name} (session: {session_id}, feature: {feature})")
+            
+            # Create callback handler - it will auto-initialize from environment variables
+            handler = CallbackHandler()
+            
+            logger.info(f"Langfuse handler created successfully for {self.name}")
+            return handler
+            
+        except Exception as e:
+            logger.error(f"Failed to create Langfuse handler for {self.name}: {e}")
+            return None
 
     def _initialize_llm(self):
         """Initialize the LangChain LLM with role-specific temperature for diverse responses"""
@@ -432,13 +507,33 @@ Remember: You are an independent thinking agent with your own memory, tools, and
             self.db_session.rollback()
 
     async def think_and_respond(
-        self, user_message: str, product_context: Dict[str, Any], session_id: str = None
-    ) -> str:
+        self, user_message: str, product_context: Dict[str, Any], session_id: str = None,
+        feature: str = "chat", trace_metadata: Dict[str, Any] = None
+    ) -> tuple[str, str]:
         """
         Main method for persona to think and respond - FAST PATH without agent overhead
+        
+        Args:
+            user_message: The user's message
+            product_context: Product context dictionary
+            session_id: Session ID for grouping conversations
+            feature: Feature name for tracing (chat, debate, summary)
+            trace_metadata: Additional metadata for Langfuse trace
+            
+        Returns:
+            Tuple of (response_text, trace_id) - trace_id is None if Langfuse disabled
         """
         if not session_id:
             session_id = str(uuid.uuid4())
+
+        # Create Langfuse handler
+        langfuse_handler = self._create_langfuse_handler(
+            session_id=session_id,
+            feature=feature,
+            metadata=trace_metadata
+        )
+        
+        trace_id = None
 
         try:
             logger.debug(f"{self.name} thinking about: {user_message[:50]}...")
@@ -473,7 +568,21 @@ Respond as {self.name} based on your role and expertise.""",
                 },
             ]
 
-            response_obj = await self.llm.ainvoke(messages)
+            # Call LLM with Langfuse callback if available
+            if langfuse_handler:
+                logger.info(f"Calling LLM with Langfuse tracing for {self.name}")
+                response_obj = await self.llm.ainvoke(messages, config={"callbacks": [langfuse_handler]})
+                # Get trace ID from handler
+                try:
+                    trace_id = langfuse_handler.get_trace_id()
+                    logger.info(f"Langfuse trace ID for {self.name}: {trace_id}")
+                except Exception as e:
+                    logger.warning(f"Could not get trace ID: {e}")
+                    pass
+            else:
+                logger.debug(f"No Langfuse handler for {self.name}")
+                response_obj = await self.llm.ainvoke(messages)
+                
             response = response_obj.content
 
             logger.debug(f"{self.name} generated response: {response[:100]}...")
@@ -508,12 +617,12 @@ Respond as {self.name} based on your role and expertise.""",
             # Save to persistent database
             self._save_memory_to_db(user_message, response, session_id)
 
-            return response
+            return response, trace_id
 
         except Exception as e:
             error_msg = f"Error in {self.name}'s thinking process: {str(e)}"
             logger.error(error_msg)
-            return f"I apologize, but I'm having trouble processing your request right now. Error: {str(e)}"
+            return f"I apologize, but I'm having trouble processing your request right now. Error: {str(e)}", None
 
     # Enhanced Tool Implementations
     def _analyze_product_context(self, query: str) -> str:
@@ -658,8 +767,22 @@ class LangChainPersonaManager:
         user_message: str,
         product_context: Dict[str, Any],
         session_id: str = None,
+        feature: str = "chat",
+        trace_metadata: Dict[str, Any] = None,
     ) -> List[Dict[str, Any]]:
-        """Get responses from all active personas using LangChain agents"""
+        """Get responses from all active personas using LangChain agents
+        
+        Args:
+            active_persona_ids: List of persona IDs to get responses from
+            user_message: The user's message
+            product_context: Product context dictionary
+            session_id: Session ID for grouping conversations
+            feature: Feature name for tracing (chat, debate, summary)
+            trace_metadata: Additional metadata for Langfuse traces
+            
+        Returns:
+            List of response dictionaries with persona data and trace_id
+        """
         if not session_id:
             session_id = str(uuid.uuid4())
 
@@ -670,7 +793,7 @@ class LangChainPersonaManager:
         for persona_id in active_persona_ids:
             if persona_id in self.personas:
                 task = self.personas[persona_id].think_and_respond(
-                    user_message, product_context, session_id
+                    user_message, product_context, session_id, feature, trace_metadata
                 )
                 tasks.append((persona_id, task))
 
@@ -678,19 +801,20 @@ class LangChainPersonaManager:
         responses = []
         for persona_id, task in tasks:
             try:
-                response = await task
+                response, trace_id = await task
                 persona = self.personas[persona_id]
-                responses.append(
-                    {
-                        "persona_id": persona_id,
-                        "name": persona.name,
-                        "response": response,
-                        "role": persona.role,
-                        "company": persona.company,
-                        "avatar": persona.avatar,
-                        "system": "langchain",
-                    }
-                )
+                response_dict = {
+                    "persona_id": persona_id,
+                    "name": persona.name,
+                    "response": response,
+                    "role": persona.role,
+                    "company": persona.company,
+                    "avatar": persona.avatar,
+                    "system": "langchain",
+                }
+                if trace_id:
+                    response_dict["trace_id"] = trace_id
+                responses.append(response_dict)
             except Exception as e:
                 logger.error(f"Error from {persona_id}: {e}")
                 persona = self.personas[persona_id]

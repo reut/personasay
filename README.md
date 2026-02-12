@@ -126,7 +126,12 @@ cd backend && source venv/bin/activate && python main.py
 # Backend
 cd backend && python3 -m venv venv && source venv/bin/activate
 pip install -r config/requirements.txt && cp config/config.env.example config.env
-# Add your OPENAI_API_KEY to config.env, then:
+# Add your OPENAI_API_KEY to config.env
+
+# Initialize database from starter template (optional)
+python init_db.py
+
+# Start backend
 python main.py
 
 # Frontend (in new terminal)

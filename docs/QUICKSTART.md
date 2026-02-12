@@ -49,8 +49,11 @@ cd backend
 python3 -m venv venv
 source venv/bin/activate  # Windows: venv\Scripts\activate
 pip install -r config/requirements.txt
-cp config/config.env.example config.env
-# Edit config.env and add your OPENAI_API_KEY
+cp config/config.env.example .env
+# Edit .env and add your OPENAI_API_KEY
+
+# Initialize database (optional - will auto-create if skipped)
+python init_db.py
 
 # 3. Setup frontend (in new terminal)
 cd frontend
